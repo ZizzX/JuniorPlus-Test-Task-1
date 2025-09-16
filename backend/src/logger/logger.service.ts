@@ -1,5 +1,4 @@
 import pino, { Logger as PinoLogger, LoggerOptions } from 'pino';
-import { randomUUID } from 'crypto';
 import { ILogger, LogLevel, LoggerContext } from './logger.interface';
 
 export interface LoggerServiceOptions {
@@ -36,17 +35,6 @@ export class LoggerService implements ILogger {
 				: undefined;
 
 		this.logger = pino({ ...baseOptions, transport });
-	}
-
-	child(context: LoggerContext): LoggerService {
-		const child = this.logger.child(context);
-		const instance = Object.create(LoggerService.prototype) as LoggerService;
-		(instance as any).logger = child;
-		return instance;
-	}
-
-	withRequestId(requestId?: string): LoggerService {
-		return this.child({ requestId: requestId || randomUUID() });
 	}
 
 	fatal(msg: unknown, meta?: LoggerContext) {

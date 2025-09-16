@@ -18,6 +18,4 @@ export interface ILogger {
 	info(msg: unknown, meta?: LoggerContext): void;
 	debug(msg: unknown, meta?: LoggerContext): void;
 	trace(msg: unknown, meta?: LoggerContext): void;
-	child(context: LoggerContext): ILogger;
-	withRequestId(requestId?: string): ILogger;
 }
