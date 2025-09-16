@@ -1,9 +1,11 @@
+import { ExceptionFilter } from './errors/exception.filter';
 import express, { Express } from 'express';
 import { Server } from 'http';
 import { UserController } from './users/user.controller';
 import pinoHttp from 'pino-http';
 import { ILogger } from './logger/logger.interface';
 import { randomUUID } from 'crypto';
+import { IExceptionFilter } from './errors/exception.filter.interface';
 
 export class App {
 	private port: number;
@@ -11,12 +13,18 @@ export class App {
 	app: Express;
 	server!: Server;
 	private UserController: UserController;
+	private exceptionFilter: IExceptionFilter;
 
-	constructor(logger: ILogger, userController: UserController) {
+	constructor(
+		logger: ILogger,
+		userController: UserController,
+		exceptionFilter: IExceptionFilter
+	) {
 		this.app = express();
 		this.port = Number(process.env.PORT) || 3000;
 		this.logger = logger;
 		this.UserController = userController;
+		this.exceptionFilter = exceptionFilter;
 	}
 
 	useRoutes() {
@@ -40,19 +48,7 @@ export class App {
 	}
 
 	useExceptionFilters() {
-		this.app.use(
-			(
-				err: Error,
-				req: express.Request,
-				res: express.Response,
-				next: express.NextFunction
-			) => {
-				this.logger.error(
-					`Error on processing request ${req.method} ${req.path}: ${err.message}`
-				);
-				res.status(500).send({ error: err.message });
-			}
-		);
+		this.app.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
 	}
 
 	public async init() {
