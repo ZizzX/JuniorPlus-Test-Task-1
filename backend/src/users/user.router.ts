@@ -1,9 +1,10 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
+import { logger } from '../logger/logger.service';
 
 const router = Router();
 
-router.get('/', () => {
-    console.log('User route');
+router.get('/', (req: Request, res: Response) => {
+    res.json({ users: [], requestId: (req as any).id });
 });
 
 export { router as userRouter };
