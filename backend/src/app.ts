@@ -6,10 +6,10 @@ import { ILogger } from './logger/logger.interface';
 import { randomUUID } from 'crypto';
 
 export class App {
-	port: number;
+	private port: number;
+	private logger: ILogger;
 	app: Express;
 	server!: Server;
-	private logger: ILogger;
 
 	constructor(logger: ILogger) {
 		this.app = express();
