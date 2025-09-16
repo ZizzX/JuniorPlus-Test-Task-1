@@ -28,9 +28,9 @@ export class App {
 				logger: (this.logger as any).logger,
 				genReqId: req =>
 					(req.headers['x-request-id'] as string) || randomUUID(),
-				customLogLevel: (res, err) => {
+				customLogLevel: res => {
 					const code = res.statusCode ?? 200;
-					if (err || code >= 500) return 'error';
+					if (code >= 500) return 'error';
 					if (code >= 400) return 'warn';
 					return 'info';
 				},
