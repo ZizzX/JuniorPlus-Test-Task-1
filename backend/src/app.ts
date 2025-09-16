@@ -39,9 +39,26 @@ export class App {
 		);
 	}
 
+	useExceptionFilters() {
+		this.app.use(
+			(
+				err: Error,
+				req: express.Request,
+				res: express.Response,
+				next: express.NextFunction
+			) => {
+				this.logger.error(
+					`Error on processing request ${req.method} ${req.path}: ${err.message}`
+				);
+				res.status(500).send({ error: err.message });
+			}
+		);
+	}
+
 	public async init() {
 		this.useLogger();
 		this.useRoutes();
+		this.useExceptionFilters();
 		this.server = this.app.listen(this.port, () => {
 			this.logger.info(`Server is running on http://localhost:${this.port}`);
 		});
