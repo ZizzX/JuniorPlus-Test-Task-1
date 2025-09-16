@@ -1,11 +1,24 @@
 import { Router, Request, Response } from 'express';
-import { logger } from '../logger/logger.service';
+import { ILogger } from '../logger/logger.interface';
 
-const router = Router();
+export class UserRouter {
+	private router: Router;
+	private logger: ILogger;
 
-router.get('/', (req: Request, res: Response) => {
-	res.log.info('Fetching users');
-	res.json({ users: [], requestId: (req as any).id });
-});
+	constructor(logger: ILogger) {
+		this.logger = logger;
+		this.router = Router();
+		this.initializeRoutes();
+	}
 
-export { router as userRouter };
+	private initializeRoutes() {
+		this.router.get('/', (req: Request, res: Response) => {
+			this.logger.info('Fetching users', { requestId: (req as any).id });
+			res.json({ users: [], requestId: (req as any).id });
+		});
+	}
+
+	getRouter(): Router {
+		return this.router;
+	}
+}

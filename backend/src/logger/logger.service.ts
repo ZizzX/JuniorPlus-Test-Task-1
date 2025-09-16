@@ -1,17 +1,6 @@
 import pino, { Logger as PinoLogger, LoggerOptions } from 'pino';
 import { randomUUID } from 'crypto';
-
-export type LogLevel =
-	| 'fatal'
-	| 'error'
-	| 'warn'
-	| 'info'
-	| 'debug'
-	| 'trace'
-	| 'silent';
-export interface LoggerContext {
-	[key: string]: unknown;
-}
+import { ILogger, LogLevel, LoggerContext } from './logger.interface';
 
 export interface LoggerServiceOptions {
 	level?: LogLevel;
@@ -19,7 +8,7 @@ export interface LoggerServiceOptions {
 	base?: Record<string, unknown>;
 }
 
-export class LoggerService {
+export class LoggerService implements ILogger {
 	private readonly logger: PinoLogger;
 
 	constructor(options: LoggerServiceOptions = {}) {
@@ -84,5 +73,3 @@ export class LoggerService {
 		this.logger.trace(meta ?? {}, msg as any);
 	}
 }
-
-export const logger = new LoggerService();

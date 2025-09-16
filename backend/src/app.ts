@@ -1,28 +1,31 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import { Server } from 'http';
-import { userRouter } from './users/user.router';
+import { UserRouter } from './users/user.router';
 import pinoHttp from 'pino-http';
-import { logger } from './logger/logger.service';
+import { ILogger } from './logger/logger.interface';
 import { randomUUID } from 'crypto';
 
 export class App {
 	port: number;
 	app: Express;
 	server!: Server;
+	private logger: ILogger;
 
-	constructor() {
+	constructor(logger: ILogger) {
 		this.app = express();
 		this.port = Number(process.env.PORT) || 3000;
+		this.logger = logger;
 	}
 
 	useRoutes() {
-		this.app.use('/users', userRouter);
+		const userRouter = new UserRouter(this.logger);
+		this.app.use('/users', userRouter.getRouter());
 	}
 
 	useLogger() {
 		this.app.use(
 			pinoHttp({
-				logger: (logger as any).logger,
+				logger: (this.logger as any).logger,
 				genReqId: req =>
 					(req.headers['x-request-id'] as string) || randomUUID(),
 				customLogLevel: (res, err) => {
@@ -39,7 +42,7 @@ export class App {
 		this.useLogger();
 		this.useRoutes();
 		this.server = this.app.listen(this.port, () => {
-			logger.info(`Server is running on http://localhost:${this.port}`);
+			this.logger.info(`Server is running on http://localhost:${this.port}`);
 		});
 	}
 }
