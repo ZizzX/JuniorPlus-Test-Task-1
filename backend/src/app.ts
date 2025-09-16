@@ -1,6 +1,6 @@
-import express, { Express, Request, Response, NextFunction } from 'express';
+import express, { Express } from 'express';
 import { Server } from 'http';
-import { UserRouter } from './users/user.router';
+import { UserController } from './users/user.controller';
 import pinoHttp from 'pino-http';
 import { ILogger } from './logger/logger.interface';
 import { randomUUID } from 'crypto';
@@ -10,16 +10,17 @@ export class App {
 	private logger: ILogger;
 	app: Express;
 	server!: Server;
+	private UserController: UserController;
 
-	constructor(logger: ILogger) {
+	constructor(logger: ILogger, userController: UserController) {
 		this.app = express();
 		this.port = Number(process.env.PORT) || 3000;
 		this.logger = logger;
+		this.UserController = userController;
 	}
 
 	useRoutes() {
-		const userRouter = new UserRouter(this.logger);
-		this.app.use('/users', userRouter.getRouter());
+		this.app.use('/users', this.UserController.getRouter());
 	}
 
 	useLogger() {
