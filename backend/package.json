@@ -1,6 +1,7 @@
 {
 	"scripts": {
 		"dev": "ts-node-dev --respawn --transpile-only src/main.ts",
+		"dev:debug": "ts-node-dev --respawn --transpile-only --inspect=localhost:9229 src/main.ts -r ts-node/register",
 		"build": "tsc -p tsconfig.json",
 		"start": "node dist/main.js",
 		"lint": "eslint src/**/*.ts",
