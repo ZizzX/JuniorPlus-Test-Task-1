@@ -1,4 +1,3 @@
-import { ExceptionFilter } from './exception-filter/exception.filter';
 import express, { Express } from 'express';
 import { Server } from 'http';
 import { UserController } from './users/user.controller';
