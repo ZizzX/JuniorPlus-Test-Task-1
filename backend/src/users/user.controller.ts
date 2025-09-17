@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { injectable, inject } from 'inversify';
-import { ILogger } from '../logger/logger.interface';
+import { inject, injectable } from 'inversify';
 import { BaseController } from '../common/base.controller';
 import { TYPES } from '../common/inject.constants';
+import { ILogger } from '../logger/logger.interface';
 
 @injectable()
 export class UserController extends BaseController {
@@ -25,11 +25,11 @@ export class UserController extends BaseController {
 
 	private registerUser(req: Request, res: Response, next: () => void) {
 		this.logger.info('Registering user', { requestId: (req as any).id });
-		res.json({ user: {}, requestId: (req as any).id });
+		this.created(res, { user: {}, requestId: (req as any).id });
 	}
 
 	private loginUser(req: Request, res: Response, next: () => void) {
 		this.logger.info('Logging in user', { requestId: (req as any).id });
-		res.json({ user: {}, requestId: (req as any).id });
+		this.ok(res, { user: {}, requestId: (req as any).id });
 	}
 }
