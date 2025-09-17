@@ -1,14 +1,13 @@
+import { Container } from 'inversify';
+import { containerModule } from './common/inject.container.module';
 import { App } from './app';
-import { ExceptionFilter } from './errors/exception.filter';
-import { LoggerService } from './logger/logger.service';
-import { UserController } from './users/user.controller';
+import { TYPES } from './common/inject.constants';
 
 async function bootstrap() {
-	const logger = new LoggerService();
-	const userController = new UserController(logger);
-	const exceptionFilter = new ExceptionFilter(logger);
+	const container = new Container();
+	container.load(containerModule);
 
-	const app = new App(logger, userController, exceptionFilter);
+	const app = container.get<App>(TYPES.Application);
 	await app.init();
 }
 

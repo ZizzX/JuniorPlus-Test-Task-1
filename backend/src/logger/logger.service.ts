@@ -1,4 +1,5 @@
 import pino, { Logger as PinoLogger, LoggerOptions } from 'pino';
+import { injectable } from 'inversify';
 import { ILogger, LogLevel, LoggerContext } from './logger.interface';
 
 export interface LoggerServiceOptions {
@@ -7,6 +8,7 @@ export interface LoggerServiceOptions {
 	base?: Record<string, unknown>;
 }
 
+@injectable()
 export class LoggerService implements ILogger {
 	private readonly logger: PinoLogger;
 

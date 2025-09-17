@@ -1,9 +1,12 @@
 import { Router, Request, Response } from 'express';
+import { injectable, inject } from 'inversify';
 import { ILogger } from '../logger/logger.interface';
 import { BaseController } from '../common/base.controller';
+import { TYPES } from '../common/inject.constants';
 
+@injectable()
 export class UserController extends BaseController {
-	constructor(logger: ILogger) {
+	constructor(@inject(TYPES.LoggerService) logger: ILogger) {
 		super(logger);
 
 		this.bindRoutes([

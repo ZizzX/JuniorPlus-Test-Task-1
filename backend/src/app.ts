@@ -1,12 +1,15 @@
-import { ExceptionFilter } from './errors/exception.filter';
+import { ExceptionFilter } from './exception-filter/exception.filter';
 import express, { Express } from 'express';
 import { Server } from 'http';
 import { UserController } from './users/user.controller';
 import pinoHttp from 'pino-http';
 import { ILogger } from './logger/logger.interface';
 import { randomUUID } from 'crypto';
-import { IExceptionFilter } from './errors/exception.filter.interface';
+import { IExceptionFilter } from './exception-filter/exception.filter.interface';
+import { injectable, inject } from 'inversify';
+import { TYPES } from './common/inject.constants';
 
+@injectable()
 export class App {
 	private port: number;
 	private logger: ILogger;
@@ -16,9 +19,9 @@ export class App {
 	private exceptionFilter: IExceptionFilter;
 
 	constructor(
-		logger: ILogger,
-		userController: UserController,
-		exceptionFilter: IExceptionFilter
+		@inject(TYPES.LoggerService) logger: ILogger,
+		@inject(TYPES.UserController) userController: UserController,
+		@inject(TYPES.ExceptionFilter) exceptionFilter: IExceptionFilter
 	) {
 		this.app = express();
 		this.port = Number(process.env.PORT) || 3000;
