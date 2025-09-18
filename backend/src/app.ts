@@ -1,12 +1,12 @@
+import { randomUUID } from 'crypto';
 import express, { Express } from 'express';
 import { Server } from 'http';
-import { UserController } from './users/user.controller';
+import { inject, injectable } from 'inversify';
 import pinoHttp from 'pino-http';
-import { ILogger } from './logger/logger.interface';
-import { randomUUID } from 'crypto';
-import { IExceptionFilter } from './exception-filter/exception.filter.interface';
-import { injectable, inject } from 'inversify';
 import { TYPES } from './common/inject.constants';
+import { IExceptionFilter } from './exception-filter/exception.filter.interface';
+import { ILogger } from './logger/logger.interface';
+import { UserController } from './users/user.controller';
 
 @injectable()
 export class App {
@@ -27,6 +27,10 @@ export class App {
 		this.logger = logger;
 		this.UserController = userController;
 		this.exceptionFilter = exceptionFilter;
+	}
+
+	useMiddleware() {
+		this.app.use(express.json());
 	}
 
 	useRoutes() {
