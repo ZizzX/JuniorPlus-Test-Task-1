@@ -15,17 +15,17 @@ export class UserController extends BaseController {
 			{
 				method: 'post',
 				path: '/register',
-				handler: this.registerUser.bind(this),
+				handler: this.registerUser,
 			},
 			{
 				method: 'post',
 				path: '/login',
-				handler: this.loginUser.bind(this),
+				handler: this.loginUser,
 			},
 		]);
 	}
 
-	private registerUser(
+	public registerUser(
 		req: Request<{}, {}, UserRegisterDto>,
 		res: Response,
 		next: () => void
@@ -34,7 +34,7 @@ export class UserController extends BaseController {
 		this.created(res, { user: {}, requestId: (req as any).id });
 	}
 
-	private loginUser(
+	public loginUser(
 		req: Request<{}, {}, UserLoginDto>,
 		res: Response,
 		next: () => void
