@@ -17,7 +17,9 @@ export abstract class BaseController {
 				`Binding route ${route.method.toUpperCase()} ${route.path}`
 			);
 			const handler = route.handler.bind(this);
-			this.router[route.method](route.path, handler);
+			const middlewares = route.middlewares?.map(m => m.bind(this));
+			const pipe = middlewares ? [...middlewares, handler] : handler;
+			this.router[route.method](route.path, pipe);
 		}
 	}
 
