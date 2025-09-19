@@ -5,4 +5,4 @@ export const TYPES = {
 	Application: Symbol.for('Application'),
 	UserRepository: Symbol.for('UserRepository'),
 	UserService: Symbol.for('UserService'),
-};
+} as const;

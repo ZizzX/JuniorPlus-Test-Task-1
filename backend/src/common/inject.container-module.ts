@@ -6,6 +6,8 @@ import { ILogger } from '../logger/logger.interface';
 import { LoggerService } from '../logger/logger.service';
 import { UserController } from '../users/user.controller';
 import { IUserController } from '../users/user.controller.interface';
+import { UserService } from '../users/user.service';
+import { IUserService } from '../users/user.service.interface';
 import { TYPES } from './inject.constants';
 
 const containerModule = new ContainerModule(({ bind }) => {
@@ -16,6 +18,7 @@ const containerModule = new ContainerModule(({ bind }) => {
 	bind<IUserController>(TYPES.UserController)
 		.to(UserController)
 		.inSingletonScope();
+	bind<IUserService>(TYPES.UserService).to(UserService);
 	bind<App>(TYPES.Application).to(App).inSingletonScope();
 });
 

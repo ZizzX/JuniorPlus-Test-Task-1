@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+import { TYPES } from '../common/inject.constants';
 import { ILogger } from '../logger/logger.interface';
 import { User } from './user.entity';
 import { IUserService } from './user.service.interface';
