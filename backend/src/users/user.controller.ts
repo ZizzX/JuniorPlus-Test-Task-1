@@ -6,10 +6,14 @@ import { ILogger } from '../logger/logger.interface';
 import { UserLoginDto } from './dto/user-login.dto';
 import { UserRegisterDto } from './dto/user-register.dto';
 import { IUserController } from './user.controller.interface';
+import { IUserService } from './user.service.interface';
 
 @injectable()
 export class UserController extends BaseController implements IUserController {
-	constructor(@inject(TYPES.LoggerService) logger: ILogger) {
+	constructor(
+		@inject(TYPES.LoggerService) logger: ILogger,
+		@inject(TYPES.UserService) private userService: IUserService
+	) {
 		super(logger);
 
 		this.bindRoutes([
@@ -31,8 +35,22 @@ export class UserController extends BaseController implements IUserController {
 		res: Response,
 		next: () => void
 	) {
-		this.logger.info('Registering user', { requestId: (req as any).id });
-		this.created(res, { user: {}, requestId: (req as any).id });
+		const { email, name, password } = req.body;
+		const user = this.userService.createUser(email, name, password);
+		if (!user) {
+			this.logger.error('User creation failed', {
+				user,
+				requestId: (req as any).id,
+			});
+			this.internalError(res, 'User creation failed');
+			return;
+		}
+
+		this.logger.info('User registered successfully', {
+			user,
+			requestId: (req as any).id,
+		});
+		this.created(res, { user, requestId: (req as any).id });
 	}
 
 	public loginUser(

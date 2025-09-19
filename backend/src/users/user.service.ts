@@ -7,6 +7,7 @@ import { IUserService } from './user.service.interface';
 @injectable()
 export class UserService implements IUserService {
 	constructor(@inject(TYPES.LoggerService) private logger: ILogger) {}
+
 	async createUser(
 		email: string,
 		name: string,

@@ -60,6 +60,10 @@ export abstract class BaseController {
 		this.send(res, 409, { message: message ?? 'Conflict' });
 	}
 
+	public internalError(res: any, message?: string): void {
+		this.send(res, 422, { message: message ?? 'Internal Server Error' });
+	}
+
 	public tooMany(res: any, message?: string): void {
 		this.send(res, 429, { message: message ?? 'Too Many Requests' });
 	}
