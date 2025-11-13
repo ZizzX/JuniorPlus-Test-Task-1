@@ -7,6 +7,7 @@ import { TYPES } from './common/inject.constants';
 import { IExceptionFilter } from './exception-filter/exception.filter.interface';
 import { ILogger } from './logger/logger.interface';
 import { UserController } from './users/user.controller';
+import { IUserController } from './users/user.controller.interface';
 
 @injectable()
 export class App {
@@ -14,12 +15,12 @@ export class App {
 	private logger: ILogger;
 	app: Express;
 	server!: Server;
-	private UserController: UserController;
+	private UserController: IUserController;
 	private exceptionFilter: IExceptionFilter;
 
 	constructor(
 		@inject(TYPES.LoggerService) logger: ILogger,
-		@inject(TYPES.UserController) userController: UserController,
+		@inject(TYPES.UserController) userController: IUserController,
 		@inject(TYPES.ExceptionFilter) exceptionFilter: IExceptionFilter
 	) {
 		this.app = express();
@@ -58,6 +59,7 @@ export class App {
 	}
 
 	public async init() {
+		this.useMiddleware();
 		this.useLogger();
 		this.useRoutes();
 		this.useExceptionFilters();
