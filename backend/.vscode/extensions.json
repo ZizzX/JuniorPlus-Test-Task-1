@@ -1,0 +1,108 @@
+{
+	"recommendations": [
+		// ============================================
+		// ESSENTIAL EXTENSIONS
+		// ============================================
+
+		// Code Quality & Linting
+		"dbaeumer.vscode-eslint",
+		"esbenp.prettier-vscode",
+
+		// TypeScript & JavaScript
+		"ms-vscode.vscode-typescript-next",
+
+		// ============================================
+		// HIGHLY RECOMMENDED EXTENSIONS
+		// ============================================
+
+		// Git Integration
+		"eamodio.gitlens",
+		"mhutchie.git-graph",
+
+		// Code Navigation & IntelliSense
+		"christian-kohler.path-intellisense",
+		"christian-kohler.npm-intellisense",
+
+		// Import Management
+		"wix.vscode-import-cost",
+		"steoates.autoimport",
+
+		// Code Snippets & Productivity
+		"dsznajder.es7-react-js-snippets",
+		"formulahendry.auto-rename-tag",
+		"formulahendry.auto-close-tag",
+
+		// ============================================
+		// OPTIONAL BUT USEFUL EXTENSIONS
+		// ============================================
+
+		// REST API Testing
+		"humao.rest-client",
+
+		// Documentation
+		"streetsidesoftware.code-spell-checker",
+		"yzhang.markdown-all-in-one",
+
+		// Code Formatting & Beautification
+		"editorconfig.editorconfig",
+
+		// Error Lens (inline error display)
+		"usernamehw.errorlens",
+
+		// Better Comments
+		"aaron-bond.better-comments",
+
+		// Bracket Pair Colorizer (built-in now, but extension adds more features)
+		"coenraads.bracket-pair-colorizer-2",
+
+		// TODO Highlight
+		"wayou.vscode-todo-highlight",
+
+		// File Icons
+		"pkief.material-icon-theme",
+
+		// Color Highlight
+		"naumovs.color-highlight",
+
+		// ============================================
+		// DEBUGGING & TESTING
+		// ============================================
+
+		// Node.js Debugging
+		"ms-vscode.node-debug2",
+
+		// Docker (if using containers)
+		"ms-azuretools.vscode-docker",
+
+		// ============================================
+		// DATABASE EXTENSIONS (if needed)
+		// ============================================
+
+		// MongoDB
+		"mongodb.mongodb-vscode",
+
+		// PostgreSQL
+		"ckolkman.vscode-postgres",
+
+		// ============================================
+		// PRODUCTIVITY EXTENSIONS
+		// ============================================
+
+		// Project Manager
+		"alefragnani.project-manager",
+
+		// Bookmarks
+		"alefragnani.bookmarks",
+
+		// Code Metrics
+		"kisstkondoros.vscode-codemetrics",
+
+		// Thunder Client (API Testing)
+		"rangav.vscode-thunder-client"
+	],
+	"unwantedRecommendations": [
+		// Extensions that conflict with our setup
+		"hookyqr.beautify",
+		"ms-vscode.vscode-typescript-tslint-plugin"
+	]
+}
