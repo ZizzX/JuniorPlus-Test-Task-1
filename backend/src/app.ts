@@ -4,9 +4,9 @@ import { Server } from 'http';
 import { inject, injectable } from 'inversify';
 import pinoHttp from 'pino-http';
 import { TYPES } from './common/inject.constants';
+import { IConfigService } from './config/config.service.interface';
 import { IExceptionFilter } from './exception-filter/exception.filter.interface';
 import { ILogger } from './logger/logger.interface';
-import { UserController } from './users/user.controller';
 import { IUserController } from './users/user.controller.interface';
 
 @injectable()
@@ -17,17 +17,20 @@ export class App {
 	server!: Server;
 	private UserController: IUserController;
 	private exceptionFilter: IExceptionFilter;
+	private configService: IConfigService;
 
 	constructor(
 		@inject(TYPES.LoggerService) logger: ILogger,
 		@inject(TYPES.UserController) userController: IUserController,
-		@inject(TYPES.ExceptionFilter) exceptionFilter: IExceptionFilter
+		@inject(TYPES.ExceptionFilter) exceptionFilter: IExceptionFilter,
+		@inject(TYPES.ConfigService) configService: IConfigService
 	) {
 		this.app = express();
-		this.port = Number(process.env.PORT) || 3000;
 		this.logger = logger;
 		this.UserController = userController;
 		this.exceptionFilter = exceptionFilter;
+		this.configService = configService;
+		this.port = Number(this.configService.get('PORT')) || 3000;
 	}
 
 	useMiddleware() {

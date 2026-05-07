@@ -1,5 +1,7 @@
 import { ContainerModule } from 'inversify';
 import { App } from '../app';
+import { ConfigService } from '../config/config.service';
+import { IConfigService } from '../config/config.service.interface';
 import { ExceptionFilter } from '../exception-filter/exception.filter';
 import { IExceptionFilter } from '../exception-filter/exception.filter.interface';
 import { ILogger } from '../logger/logger.interface';
@@ -15,6 +17,7 @@ const containerModule = new ContainerModule(({ bind }) => {
 	bind<IExceptionFilter>(TYPES.ExceptionFilter)
 		.to(ExceptionFilter)
 		.inSingletonScope();
+	bind<IConfigService>(TYPES.ConfigService).to(ConfigService).inSingletonScope();
 	bind<IUserController>(TYPES.UserController)
 		.to(UserController)
 		.inSingletonScope();
