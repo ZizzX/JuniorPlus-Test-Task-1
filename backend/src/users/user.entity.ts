@@ -1,31 +1,36 @@
+import { compare, hash } from 'bcryptjs';
 import { IUser } from './user.interface';
 
 export class User implements IUser {
 	id: string;
 	createdAt: Date;
 	updatedAt: Date;
-	private password: string = '';
+	private passwordHash: string = '';
 
 	constructor(
 		public email: string,
 		public name: string,
-		private passwordHash?: string
+		existingHash?: string
 	) {
 		this.id = crypto.randomUUID();
 		this.createdAt = new Date();
 		this.updatedAt = new Date();
 
-		if (passwordHash) {
-			this.password = passwordHash;
+		if (existingHash) {
+			this.passwordHash = existingHash;
 		}
 	}
 
-	setPassword(password: string): void {
-		this.password = password;
+	public async setPassword(password: string, salt: number): Promise<void> {
+		this.passwordHash = await hash(password, salt);
 		this.updatedAt = new Date();
 	}
 
-	getPassword(): string {
-		return this.password;
+	public getPassword(): string {
+		return this.passwordHash;
+	}
+
+	public async comparePassword(password: string): Promise<boolean> {
+		return compare(password, this.passwordHash);
 	}
 }

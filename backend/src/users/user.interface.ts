@@ -4,6 +4,6 @@ export interface IUser {
 	name: string;
 	createdAt: Date;
 	updatedAt: Date;
-	setPassword(password: string): void;
+	setPassword(password: string, salt: number): void;
 	getPassword(): string;
 }
