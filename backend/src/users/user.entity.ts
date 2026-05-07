@@ -20,12 +20,12 @@ export class User implements IUser {
 		}
 	}
 
-	setPassword(password: string) {
+	setPassword(password: string): void {
 		this.password = password;
 		this.updatedAt = new Date();
 	}
 
-	getPassword() {
+	getPassword(): string {
 		return this.password;
 	}
 }
