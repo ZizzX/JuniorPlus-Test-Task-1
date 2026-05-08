@@ -4,10 +4,10 @@ import { BaseController } from '../common/base.controller';
 import { TYPES } from '../common/inject.constants';
 import { ValidateMiddleware } from '../common/validate.middleware';
 import { ILogger } from '../logger/logger.interface';
-import { UserLoginDto } from './dto/user-login.dto';
-import { UserRegisterDto } from './dto/user-register.dto';
+import { UserLoginDto, UserRegisterDto } from './user.dto';
 import { IUserController } from './user.controller.interface';
 import { IUserService } from './user.service.interface';
+import { log } from 'console';
 
 @injectable()
 export class UserController extends BaseController implements IUserController {
@@ -34,7 +34,7 @@ export class UserController extends BaseController implements IUserController {
 	}
 
 	public async registerUser(
-		req: Request<{}, {}, UserRegisterDto>,
+		req: Request,
 		res: Response,
 		next: NextFunction
 	): Promise<void> {
@@ -48,11 +48,7 @@ export class UserController extends BaseController implements IUserController {
 		this.created(res, { user });
 	}
 
-	public loginUser(
-		req: Request<{}, {}, UserLoginDto>,
-		res: Response,
-		next: NextFunction
-	): void {
+	public loginUser(req: Request, res: Response, next: NextFunction): void {
 		this.ok(res, { user: {} });
 	}
 }

@@ -10,14 +10,23 @@ import { UserController } from '../users/user.controller';
 import { IUserController } from '../users/user.controller.interface';
 import { UserService } from '../users/user.service';
 import { IUserService } from '../users/user.service.interface';
+import { PrismaService } from '../database/prisma.service';
+import { IUserRepository } from '../users/user.repository.interface';
+import { UserRepository } from '../users/user.repository';
 import { TYPES } from './inject.constants';
 
 const containerModule = new ContainerModule(({ bind }) => {
+	bind<PrismaService>(TYPES.PrismaService).to(PrismaService).inSingletonScope();
+	bind<IUserRepository>(TYPES.UserRepository)
+		.to(UserRepository)
+		.inSingletonScope();
 	bind<ILogger>(TYPES.LoggerService).to(LoggerService).inSingletonScope();
 	bind<IExceptionFilter>(TYPES.ExceptionFilter)
 		.to(ExceptionFilter)
 		.inSingletonScope();
-	bind<IConfigService>(TYPES.ConfigService).to(ConfigService).inSingletonScope();
+	bind<IConfigService>(TYPES.ConfigService)
+		.to(ConfigService)
+		.inSingletonScope();
 	bind<IUserController>(TYPES.UserController)
 		.to(UserController)
 		.inSingletonScope();

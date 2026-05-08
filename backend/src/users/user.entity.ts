@@ -5,7 +5,7 @@ export class User implements IUser {
 	id: string;
 	createdAt: Date;
 	updatedAt: Date;
-	private passwordHash: string = '';
+	passwordHash: string = '';
 
 	constructor(
 		public email: string,

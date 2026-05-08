@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+import 'class-transformer';
 import { Container } from 'inversify';
 import { App } from './app';
 import { TYPES } from './common/inject.constants';
