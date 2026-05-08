@@ -12,10 +12,15 @@ export class ValidateMiddleware implements IMiddleware {
 		next: NextFunction
 	): Promise<void> {
 		const instance = plainToInstance(this.classToValidate, req.body);
-		const errors = await validate(instance);
+
+		const errors = await validate(instance, {
+			validationError: { target: false, value: false },
+			whitelist: true,
+			forbidNonWhitelisted: true,
+		});
 
 		if (errors.length > 0) {
-			res.status(422).send(errors);
+			res.status(422).send({ errors });
 		} else {
 			next();
 		}

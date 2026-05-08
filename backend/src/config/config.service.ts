@@ -11,19 +11,23 @@ export class ConfigService implements IConfigService {
 	constructor(@inject(TYPES.LoggerService) private logger: ILogger) {
 		const result: DotenvConfigOutput = config();
 		if (result.error) {
-			this.logger.error('[ConfigService] Не удалось прочитать файл .env или он отсутствует');
+			this.logger.error(
+				'[ConfigService] Не удалось прочитать файл .env или он отсутствует'
+			);
 			// В критических системах здесь можно выбросить ошибку: throw new Error('Missing .env file');
 			this.config = process.env as DotenvParseOutput; // Fallback на переменные окружения системы
 		} else {
 			this.logger.info('[ConfigService] Конфигурация .env загружена');
-			this.config = result.parsed as DotenvParseOutput;
+			this.config = result.parsed ?? (process.env as DotenvParseOutput); // Используем parsed, если он есть, иначе fallback на process.env
 		}
 	}
 
 	get<T extends string | number>(key: string): T {
 		const value = this.config[key] || process.env[key];
 		if (!value) {
-			this.logger.warn(`[ConfigService] Ключ "${key}" не найден в конфигурации`);
+			this.logger.warn(
+				`[ConfigService] Ключ "${key}" не найден в конфигурации`
+			);
 		}
 		return value as T;
 	}
