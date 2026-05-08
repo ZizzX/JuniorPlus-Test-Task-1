@@ -75,10 +75,10 @@ export class App {
 					}),
 				},
 				customSuccessMessage: (req, res) => {
-					return `${req.method}  completed with status`;
+					return `${req.method}  completed with status ${res.statusCode}`;
 				},
 				customErrorMessage: (req, res) => {
-					return `${req.method}  failed with status`;
+					return `${req.method}  failed with status ${res.statusCode}`;
 				},
 			})
 		);
