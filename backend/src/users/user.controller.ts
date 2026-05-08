@@ -10,6 +10,7 @@ import { IUserService } from './user.service.interface';
 import { HttpError } from '../exception-filter/http-error.class';
 import { sign } from 'jsonwebtoken';
 import { IConfigService } from '../config/config.service.interface';
+import { AuthGuard } from '../common/auth.guard';
 
 @injectable()
 export class UserController extends BaseController implements IUserController {
@@ -33,6 +34,12 @@ export class UserController extends BaseController implements IUserController {
 				handler: this.loginUser,
 				middlewares: [new ValidateMiddleware(UserLoginDto)],
 			},
+			{
+				method: 'get',
+				path: '/info',
+				handler: this.info,
+				middlewares: [new AuthGuard()],
+			},
 		]);
 	}
 
@@ -44,13 +51,15 @@ export class UserController extends BaseController implements IUserController {
 		const { email, name, password } = req.body;
 		const user = await this.userService.createUser(email, name, password);
 		if (!user) {
-			return next(new HttpError(422, 'Такой пользователь уже существует', 'register'));
+			return next(
+				new HttpError(422, 'Такой пользователь уже существует', 'register')
+			);
 		}
 
 		this.created(res, {
 			email: user.email,
 			name: user.name,
-			id: user.id
+			id: user.id,
 		});
 	}
 
@@ -59,8 +68,11 @@ export class UserController extends BaseController implements IUserController {
 		res: Response,
 		next: NextFunction
 	): Promise<void> {
-		const isValid = await this.userService.validateUser(body.email, body.password);
-		
+		const isValid = await this.userService.validateUser(
+			body.email,
+			body.password
+		);
+
 		if (!isValid) {
 			return next(new HttpError(401, 'Ошибка авторизации', 'login'));
 		}
@@ -70,15 +82,31 @@ export class UserController extends BaseController implements IUserController {
 			return next(new HttpError(401, 'Пользователь не найден', 'login'));
 		}
 
-		const jwt = await this.signJWT(user.email, this.configService.get('SECRET'));
+		const jwt = await this.signJWT(
+			user.email,
+			this.configService.get('SECRET')
+		);
 
 		this.ok(res, {
 			jwt,
 			user: {
 				email: user.email,
 				name: user.name,
-				id: user.id
-			}
+				id: user.id,
+			},
+		});
+	}
+
+	public async info(
+		{ token }: Request,
+		res: Response,
+		next: NextFunction
+	): Promise<void> {
+		const userInfo = await this.userService.getUserInfo(token);
+		this.ok(res, {
+			id: userInfo?.id,
+			email: userInfo?.email,
+			name: userInfo?.name,
 		});
 	}
 

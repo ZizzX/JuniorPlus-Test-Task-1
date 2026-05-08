@@ -1,4 +1,4 @@
-import { randomUUID } from 'crypto';
+﻿import { randomUUID } from 'crypto';
 import express, { Express } from 'express';
 import { Server } from 'http';
 import { inject, injectable } from 'inversify';
@@ -9,6 +9,7 @@ import { IExceptionFilter } from './exception-filter/exception.filter.interface'
 import { ILogger } from './logger/logger.interface';
 import { IUserController } from './users/user.controller.interface';
 import { PrismaService } from './database/prisma.service';
+import { AuthMiddleware } from './common/auth.middleware';
 
 @injectable()
 export class App {
@@ -16,7 +17,7 @@ export class App {
 	private logger: ILogger;
 	app: Express;
 	server!: Server;
-	private UserController: IUserController;
+	private userController: IUserController;
 	private exceptionFilter: IExceptionFilter;
 	private configService: IConfigService;
 
@@ -29,7 +30,7 @@ export class App {
 	) {
 		this.app = express();
 		this.logger = logger;
-		this.UserController = userController;
+		this.userController = userController;
 		this.exceptionFilter = exceptionFilter;
 		this.configService = configService;
 		this.prismaService = prismaService;
@@ -38,43 +39,46 @@ export class App {
 
 	useMiddleware() {
 		this.app.use(express.json());
+		const authMiddleware = new AuthMiddleware(this.configService.get('SECRET'));
+		this.app.use(authMiddleware.execute.bind(authMiddleware));
 	}
 
 	useRoutes() {
-		this.app.use('/users', this.UserController.getRouter());
+		this.app.use('/users', this.userController.getRouter());
 	}
 
 	useLogger() {
 		this.app.use(
 			pinoHttp({
 				logger: (this.logger as any).logger,
-				genReqId: (req) => (req.headers['x-request-id'] as string) || randomUUID(),
-				customLogLevel: (res) => {
+				genReqId: req =>
+					(req.headers['x-request-id'] as string) || randomUUID(),
+				customLogLevel: res => {
 					const code = res.statusCode ?? 200;
 					if (code >= 500) return 'error';
 					if (code >= 400) return 'warn';
 					return 'info';
 				},
 				serializers: {
-					req: (req) => ({
+					req: req => ({
 						id: req.id,
 						method: req.method,
 						url: req.url,
 					}),
-					res: (res) => ({
+					res: res => ({
 						statusCode: res.statusCode,
 					}),
-					err: (err) => ({
+					err: err => ({
 						type: err.type,
 						message: err.message,
 						stack: err.stack,
 					}),
 				},
 				customSuccessMessage: (req, res) => {
-					return `${req.method} ${req.url} completed with status ${res.statusCode}`;
+					return `${req.method}  completed with status`;
 				},
 				customErrorMessage: (req, res) => {
-					return `${req.method} ${req.url} failed with status ${res.statusCode}`;
+					return `${req.method}  failed with status`;
 				},
 			})
 		);
