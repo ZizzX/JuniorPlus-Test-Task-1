@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+﻿import { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { BaseController } from '../common/base.controller';
 import { TYPES } from '../common/inject.constants';
@@ -7,13 +7,16 @@ import { ILogger } from '../logger/logger.interface';
 import { UserLoginDto, UserRegisterDto } from './user.dto';
 import { IUserController } from './user.controller.interface';
 import { IUserService } from './user.service.interface';
-import { log } from 'console';
+import { HttpError } from '../exception-filter/http-error.class';
+import { sign } from 'jsonwebtoken';
+import { IConfigService } from '../config/config.service.interface';
 
 @injectable()
 export class UserController extends BaseController implements IUserController {
 	constructor(
 		@inject(TYPES.LoggerService) logger: ILogger,
-		@inject(TYPES.UserService) private userService: IUserService
+		@inject(TYPES.UserService) private userService: IUserService,
+		@inject(TYPES.ConfigService) private configService: IConfigService
 	) {
 		super(logger);
 
@@ -41,14 +44,62 @@ export class UserController extends BaseController implements IUserController {
 		const { email, name, password } = req.body;
 		const user = await this.userService.createUser(email, name, password);
 		if (!user) {
-			this.internalError(res, 'User creation failed');
-			return;
+			return next(new HttpError(422, 'Такой пользователь уже существует', 'register'));
 		}
 
-		this.created(res, { user });
+		this.created(res, {
+			email: user.email,
+			name: user.name,
+			id: user.id
+		});
 	}
 
-	public loginUser(req: Request, res: Response, next: NextFunction): void {
-		this.ok(res, { user: {} });
+	public async loginUser(
+		{ body }: Request<{}, {}, UserLoginDto>,
+		res: Response,
+		next: NextFunction
+	): Promise<void> {
+		const isValid = await this.userService.validateUser(body.email, body.password);
+		
+		if (!isValid) {
+			return next(new HttpError(401, 'Ошибка авторизации', 'login'));
+		}
+
+		const user = await this.userService.getUserInfo(body.email);
+		if (!user) {
+			return next(new HttpError(401, 'Пользователь не найден', 'login'));
+		}
+
+		const jwt = await this.signJWT(user.email, this.configService.get('SECRET'));
+
+		this.ok(res, {
+			jwt,
+			user: {
+				email: user.email,
+				name: user.name,
+				id: user.id
+			}
+		});
+	}
+
+	private signJWT(email: string, secret: string): Promise<string> {
+		return new Promise<string>((resolve, reject) => {
+			sign(
+				{
+					email,
+					iat: Math.floor(Date.now() / 1000),
+				},
+				secret,
+				{
+					algorithm: 'HS256',
+				},
+				(err, token) => {
+					if (err) {
+						reject(err);
+					}
+					resolve(token as string);
+				}
+			);
+		});
 	}
 }

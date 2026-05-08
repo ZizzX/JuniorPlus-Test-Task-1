@@ -6,6 +6,7 @@ import { User } from './user.entity';
 import { IUserService } from './user.service.interface';
 import { IUserRepository } from './user.repository.interface';
 import { UserModel } from '../generated/prisma/client';
+import { sign } from 'jsonwebtoken';
 
 @injectable()
 export class UserService implements IUserService {
@@ -25,6 +26,7 @@ export class UserService implements IUserService {
 			this.logger.warn(
 				`[UserService] Пользователь с email ${email} уже существует`
 			);
+			return null;
 		}
 
 		const newUser = new User(email, name);
@@ -32,7 +34,9 @@ export class UserService implements IUserService {
 		await newUser.setPassword(password, salt);
 
 		const createdUser = await this.userRepository.create(newUser);
-		this.logger.info(`[UserService] Пользователь ${email} успешно создан`);
+		this.logger.info(
+			`[UserService] Пользователь с email ${email} успешно создан`
+		);
 
 		return createdUser;
 	}
@@ -49,5 +53,9 @@ export class UserService implements IUserService {
 			existedUser.passwordHash
 		);
 		return userEntity.comparePassword(password);
+	}
+
+	async getUserInfo(email: string): Promise<UserModel | null> {
+		return this.userRepository.find(email);
 	}
 }
