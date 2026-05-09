@@ -1,4 +1,4 @@
-﻿import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { BaseController } from '../common/base.controller';
 import { TYPES } from '../common/inject.constants';
@@ -12,6 +12,12 @@ import { sign } from 'jsonwebtoken';
 import { IConfigService } from '../config/config.service.interface';
 import { AuthGuard } from '../common/auth.guard';
 
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: User management and authentication
+ */
 @injectable()
 export class UserController extends BaseController implements IUserController {
 	constructor(
@@ -43,6 +49,37 @@ export class UserController extends BaseController implements IUserController {
 		]);
 	}
 
+	/**
+	 * @swagger
+	 * /users/register:
+	 *   post:
+	 *     summary: Register a new user
+	 *     tags: [Users]
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             type: object
+	 *             required:
+	 *               - email
+	 *               - name
+	 *               - password
+	 *             properties:
+	 *               email:
+	 *                 type: string
+	 *                 format: email
+	 *               name:
+	 *                 type: string
+	 *               password:
+	 *                 type: string
+	 *                 minLength: 6
+	 *     responses:
+	 *       201:
+	 *         description: User created
+	 *       422:
+	 *         description: User already exists
+	 */
 	public async registerUser(
 		req: Request,
 		res: Response,
@@ -63,6 +100,33 @@ export class UserController extends BaseController implements IUserController {
 		});
 	}
 
+	/**
+	 * @swagger
+	 * /users/login:
+	 *   post:
+	 *     summary: Login user
+	 *     tags: [Users]
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             type: object
+	 *             required:
+	 *               - email
+	 *               - password
+	 *             properties:
+	 *               email:
+	 *                 type: string
+	 *                 format: email
+	 *               password:
+	 *                 type: string
+	 *     responses:
+	 *       200:
+	 *         description: Successful login
+	 *       401:
+	 *         description: Unauthorized
+	 */
 	public async loginUser(
 		{ body }: Request<{}, {}, UserLoginDto>,
 		res: Response,
@@ -97,6 +161,20 @@ export class UserController extends BaseController implements IUserController {
 		});
 	}
 
+	/**
+	 * @swagger
+	 * /users/info:
+	 *   get:
+	 *     summary: Get user info
+	 *     tags: [Users]
+	 *     security:
+	 *       - bearerAuth: []
+	 *     responses:
+	 *       200:
+	 *         description: User information
+	 *       401:
+	 *         description: Unauthorized
+	 */
 	public async info(
 		{ userEmail }: Request,
 		res: Response,

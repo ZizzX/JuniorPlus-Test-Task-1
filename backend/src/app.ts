@@ -13,6 +13,7 @@ import { ILogger } from './logger/logger.interface';
 import { IUserController } from './users/user.controller.interface';
 import { PrismaService } from './database/prisma.service';
 import { IMiddleware } from './common/middleware.interface';
+import { setupSwagger } from './common/swagger.config';
 
 @injectable()
 export class App {
@@ -50,8 +51,7 @@ export class App {
 				limit: 100,
 				standardHeaders: 'draft-7',
 				legacyHeaders: false,
-				message:
-					'Too many requests from this IP, please try again after 15 minutes',
+				message: 'Too many requests from this IP, please try again after 15 minutes',
 			})
 		);
 
@@ -68,6 +68,7 @@ export class App {
 			});
 		});
 		this.app.use('/users', this.userController.getRouter());
+		setupSwagger(this.app);
 	}
 
 	useLogger() {
@@ -116,17 +117,20 @@ export class App {
 		const shutdown = async (signal: string) => {
 			this.logger.info(`Received ${signal}. Shutting down gracefully...`);
 
-			this.server.close(async () => {
-				this.logger.info('HTTP server closed.');
+			if (this.server) {
+				this.server.close(async () => {
+					this.logger.info('HTTP server closed.');
+					await this.prismaService.disconnect();
+					this.logger.info('Database connection closed.');
+					process.exit(0);
+				});
+			} else {
 				await this.prismaService.disconnect();
-				this.logger.info('Database connection closed.');
 				process.exit(0);
-			});
+			}
 
 			setTimeout(() => {
-				this.logger.error(
-					'Could not close connections in time, forcefully shutting down'
-				);
+				this.logger.error('Could not close connections in time, forcefully shutting down');
 				process.exit(1);
 			}, 10000);
 		};
@@ -142,6 +146,10 @@ export class App {
 		this.useExceptionFilters();
 
 		await this.prismaService.connect();
+		
+		// If already in test mode, we might not want to start the actual listener if supertest handles it
+		// but typically we need it for init to be complete. 
+		// Supertest can take the express instance directly, but this.server needs to be populated.
 		this.server = this.app.listen(this.port, () => {
 			this.logger.info(`Server is running on http://localhost:${this.port}`);
 		});

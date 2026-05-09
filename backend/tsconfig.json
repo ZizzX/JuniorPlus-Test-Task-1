@@ -1,19 +1,19 @@
-﻿{
+{
 	"compilerOptions": {
-		"target": "ES2022",
-		"module": "CommonJS",
-		"moduleResolution": "node",
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
+		"target": "es2022",
+		"module": "commonjs",
+		"lib": ["es2022"],
+		"outDir": "./dist",
+		"rootDir": "./src",
 		"strict": true,
+		"esModuleInterop": true,
 		"skipLibCheck": true,
-		"outDir": "dist",
-		"rootDir": "src",
-		"types": ["node", "express"],
+		"forceConsistentCasingInFileNames": true,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
-		"useDefineForClassFields": false,
-		"typeRoots": ["./node_modules/@types", "./src/types"]
+		"baseUrl": ".",
+		"types": ["node", "reflect-metadata", "jest"]
 	},
-	"include": ["src"],
+	"include": ["src/**/*.ts", "tests/**/*.ts"],
+	"exclude": ["node_modules"]
 }
