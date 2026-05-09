@@ -4,7 +4,6 @@
 		"module": "commonjs",
 		"lib": ["es2022"],
 		"outDir": "./dist",
-		"rootDir": "./src",
 		"strict": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
@@ -12,8 +11,8 @@
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
 		"baseUrl": ".",
-		"types": ["node", "reflect-metadata", "jest"]
+		"types": ["node", "reflect-metadata", "jest"],
 	},
 	"include": ["src/**/*.ts", "tests/**/*.ts"],
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules", "dist"],
 }
