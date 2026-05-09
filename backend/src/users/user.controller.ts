@@ -98,11 +98,11 @@ export class UserController extends BaseController implements IUserController {
 	}
 
 	public async info(
-		{ token }: Request,
+		{ userEmail }: Request,
 		res: Response,
 		next: NextFunction
 	): Promise<void> {
-		const userInfo = await this.userService.getUserInfo(token);
+		const userInfo = await this.userService.getUserInfo(userEmail);
 		this.ok(res, {
 			id: userInfo?.id,
 			email: userInfo?.email,

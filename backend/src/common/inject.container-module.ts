@@ -14,6 +14,8 @@ import { PrismaService } from '../database/prisma.service';
 import { IUserRepository } from '../users/user.repository.interface';
 import { UserRepository } from '../users/user.repository';
 import { TYPES } from './inject.constants';
+import { AuthMiddleware } from './auth.middleware';
+import { IMiddleware } from './middleware.interface';
 
 const containerModule = new ContainerModule(({ bind }) => {
 	bind<PrismaService>(TYPES.PrismaService).to(PrismaService).inSingletonScope();
@@ -31,6 +33,7 @@ const containerModule = new ContainerModule(({ bind }) => {
 		.to(UserController)
 		.inSingletonScope();
 	bind<IUserService>(TYPES.UserService).to(UserService);
+	bind<IMiddleware>(TYPES.AuthMiddleware).to(AuthMiddleware);
 	bind<App>(TYPES.Application).to(App).inSingletonScope();
 });
 

@@ -1,6 +1,3 @@
-import { PrismaService } from '../database/prisma.service';
-import { UserRepository } from '../users/user.repository';
-
 export const TYPES = {
 	LoggerService: Symbol.for('LoggerService'),
 	ExceptionFilter: Symbol.for('ExceptionFilter'),
@@ -10,4 +7,5 @@ export const TYPES = {
 	UserService: Symbol.for('UserService'),
 	PrismaService: Symbol.for('PrismaService'),
 	UserRepository: Symbol.for('UserRepository'),
+	AuthMiddleware: Symbol.for('AuthMiddleware'),
 } as const;

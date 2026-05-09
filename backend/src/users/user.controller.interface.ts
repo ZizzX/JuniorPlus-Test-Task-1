@@ -1,17 +1,17 @@
-import { Request, Response } from 'express';
-import { UserLoginDto } from './dto/user-login.dto';
-import { UserRegisterDto } from './dto/user-register.dto';
-import { BaseController } from '../common/base.controller';
+import { NextFunction, Request, Response, Router } from 'express';
+import { UserLoginDto, UserRegisterDto } from './user.dto';
 
-export interface IUserController extends BaseController {
+export interface IUserController {
+	getRouter(): Router;
 	registerUser(
 		req: Request<{}, {}, UserRegisterDto>,
 		res: Response,
-		next: () => void
-	): void;
+		next: NextFunction
+	): Promise<void> | void;
 	loginUser(
 		req: Request<{}, {}, UserLoginDto>,
 		res: Response,
-		next: () => void
-	): void;
+		next: NextFunction
+	): Promise<void> | void;
+	info(req: Request, res: Response, next: NextFunction): Promise<void> | void;
 }

@@ -15,14 +15,26 @@ export class ExceptionFilter implements IExceptionFilter {
 		res: Response,
 		next: NextFunction
 	): void {
+		const isProd = process.env.NODE_ENV === 'production';
+
 		if (err instanceof HttpError) {
 			this.logger.error(
-				`[${err.context}] Error ${err.statusCode}: ${err.message}`
+				`[${err.context}] Error ${err.statusCode}: ${err.message}`,
+				{ stack: err.stack }
 			);
-			res.status(err.statusCode).json({ error: err.message });
+			res.status(err.statusCode).json({
+				error: err.message,
+				context: !isProd ? err.context : undefined,
+			});
 		} else {
-			this.logger.error(`Error: ${err.message}`);
-			res.status(500).json({ error: 'Internal Server Error' });
+			this.logger.error(`Unhandled Error: ${err.message}`, { stack: err.stack });
+			
+			res.status(500).json({
+				error: 'Internal Server Error',
+				// Never leak stack trace in production
+				message: !isProd ? err.message : 'Something went wrong',
+				stack: !isProd ? err.stack : undefined,
+			});
 		}
 	}
 }

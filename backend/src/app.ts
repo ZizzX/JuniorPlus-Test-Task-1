@@ -1,15 +1,18 @@
-﻿import { randomUUID } from 'crypto';
+import { randomUUID } from 'crypto';
 import express, { Express } from 'express';
 import { Server } from 'http';
 import { inject, injectable } from 'inversify';
 import pinoHttp from 'pino-http';
+import helmet from 'helmet';
+import cors from 'cors';
+import { rateLimit } from 'express-rate-limit';
 import { TYPES } from './common/inject.constants';
 import { IConfigService } from './config/config.service.interface';
 import { IExceptionFilter } from './exception-filter/exception.filter.interface';
 import { ILogger } from './logger/logger.interface';
 import { IUserController } from './users/user.controller.interface';
 import { PrismaService } from './database/prisma.service';
-import { AuthMiddleware } from './common/auth.middleware';
+import { IMiddleware } from './common/middleware.interface';
 
 @injectable()
 export class App {
@@ -26,7 +29,8 @@ export class App {
 		@inject(TYPES.UserController) userController: IUserController,
 		@inject(TYPES.ExceptionFilter) exceptionFilter: IExceptionFilter,
 		@inject(TYPES.ConfigService) configService: IConfigService,
-		@inject(TYPES.PrismaService) private prismaService: PrismaService
+		@inject(TYPES.PrismaService) private prismaService: PrismaService,
+		@inject(TYPES.AuthMiddleware) private authMiddleware: IMiddleware
 	) {
 		this.app = express();
 		this.logger = logger;
@@ -38,12 +42,31 @@ export class App {
 	}
 
 	useMiddleware() {
+		this.app.use(helmet());
+		this.app.use(cors());
+		this.app.use(
+			rateLimit({
+				windowMs: 15 * 60 * 1000,
+				limit: 100,
+				standardHeaders: 'draft-7',
+				legacyHeaders: false,
+				message:
+					'Too many requests from this IP, please try again after 15 minutes',
+			})
+		);
+
 		this.app.use(express.json());
-		const authMiddleware = new AuthMiddleware(this.configService.get('SECRET'));
-		this.app.use(authMiddleware.execute.bind(authMiddleware));
+		this.app.use(this.authMiddleware.execute.bind(this.authMiddleware));
 	}
 
 	useRoutes() {
+		this.app.get('/health', (req, res) => {
+			res.status(200).json({
+				status: 'ok',
+				uptime: process.uptime(),
+				timestamp: new Date().toISOString(),
+			});
+		});
 		this.app.use('/users', this.userController.getRouter());
 	}
 
@@ -64,6 +87,7 @@ export class App {
 						id: req.id,
 						method: req.method,
 						url: req.url,
+						body: req.method !== 'GET' ? req.body : undefined,
 					}),
 					res: res => ({
 						statusCode: res.statusCode,
@@ -75,10 +99,10 @@ export class App {
 					}),
 				},
 				customSuccessMessage: (req, res) => {
-					return `${req.method}  completed with status ${res.statusCode}`;
+					return `${req.method} ${req.url} completed with status ${res.statusCode}`;
 				},
 				customErrorMessage: (req, res) => {
-					return `${req.method}  failed with status ${res.statusCode}`;
+					return `${req.method} ${req.url} failed with status ${res.statusCode}`;
 				},
 			})
 		);
@@ -88,14 +112,40 @@ export class App {
 		this.app.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
 	}
 
+	private async setupGracefulShutdown() {
+		const shutdown = async (signal: string) => {
+			this.logger.info(`Received ${signal}. Shutting down gracefully...`);
+
+			this.server.close(async () => {
+				this.logger.info('HTTP server closed.');
+				await this.prismaService.disconnect();
+				this.logger.info('Database connection closed.');
+				process.exit(0);
+			});
+
+			setTimeout(() => {
+				this.logger.error(
+					'Could not close connections in time, forcefully shutting down'
+				);
+				process.exit(1);
+			}, 10000);
+		};
+
+		process.on('SIGTERM', () => shutdown('SIGTERM'));
+		process.on('SIGINT', () => shutdown('SIGINT'));
+	}
+
 	public async init() {
 		this.useMiddleware();
 		this.useLogger();
 		this.useRoutes();
 		this.useExceptionFilters();
+
 		await this.prismaService.connect();
 		this.server = this.app.listen(this.port, () => {
 			this.logger.info(`Server is running on http://localhost:${this.port}`);
 		});
+
+		await this.setupGracefulShutdown();
 	}
 }
