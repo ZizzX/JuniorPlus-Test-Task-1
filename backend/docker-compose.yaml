@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - SECRET=your_super_secret_jwt_key
+    volumes:
+      - ./prisma/dev.db:/app/prisma/dev.db
+    restart: always
