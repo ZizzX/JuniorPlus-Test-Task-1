@@ -4,7 +4,7 @@ import { BaseController } from '../common/base.controller';
 import { TYPES } from '../common/inject.constants';
 import { ValidateMiddleware } from '../common/validate.middleware';
 import { ILogger } from '../logger/logger.interface';
-import { UserLoginDto, UserRegisterDto } from './user.dto';
+import { UserLoginDto, UserRegisterDto } from './dto';
 import { IUserController } from './user.controller.interface';
 import { IUserService } from './user.service.interface';
 import { HttpError } from '../exception-filter/http-error.class';

@@ -167,6 +167,13 @@
 
 **Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.11-refactor-user-module)
 
+#### 1.11.5 Рефакторинг User DTO
+- [x] Разбить `backend/src/users/user.dto.ts` на отдельные файлы в `backend/src/users/dto/`
+- [x] Создать `index.ts` для экспорта DTO
+- [x] Обновить импорты в контроллере
+
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: refactor/task-1.11.5-user-dtos)
+
 ---
 
 ## 📌 ФАЗА 2: PostgreSQL Setup & Database Migration

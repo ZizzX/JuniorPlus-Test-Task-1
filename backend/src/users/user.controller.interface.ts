@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { UserLoginDto, UserRegisterDto } from './user.dto';
+import { UserLoginDto, UserRegisterDto } from './dto';
 
 export interface IUserController {
 	getRouter(): Router;

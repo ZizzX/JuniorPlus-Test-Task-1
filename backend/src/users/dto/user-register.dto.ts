@@ -11,11 +11,3 @@ export class UserRegisterDto {
 	@IsString({ message: 'Имя должно быть строкой' })
 	name!: string;
 }
-
-export class UserLoginDto {
-	@IsEmail({}, { message: 'Неверный формат email' })
-	email!: string;
-
-	@IsString({ message: 'Пароль обязателен' })
-	password!: string;
-}
