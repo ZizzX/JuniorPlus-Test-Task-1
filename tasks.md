@@ -19,55 +19,61 @@
 
 ---
 
-### 1.2 Создать Domain Entity и Interface
+### 1.2 Создать Domain Entity и Interface - ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.2-note-entity)
 
 #### 1.2.1 Создать Note Domain Entity
-- [ ] Файл `backend/src/notes/note.entity.ts`
-- [ ] Чистый TypeScript класс/интерфейс для Note: `{ id, title, content, userId, createdAt, updatedAt }`
-- [ ] **Важно**: НЕ импортируй типы из `@prisma/client` здесь (Decoupling)
+- [x] Файл `backend/src/notes/note.entity.ts`
+- [x] Чистый TypeScript класс/интерфейс для Note: `{ id, title, content, userId, createdAt, updatedAt }`
+- [x] **Важно**: НЕ импортируй типы из `@prisma/client` здесь (Decoupling)
 
-**Status**: ⬜ NOT STARTED  
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.2-note-entity)  
 **Link**: `backend/src/notes/note.entity.ts`
 
 #### 1.2.2 Создать Note Interface
-- [ ] Файл `backend/src/notes/note.interface.ts`
-- [ ] Контракты для взаимодействия (например, интерфейс для сервиса/репозитория)
+- [x] Файл `backend/src/notes/note.interface.ts`
+- [x] Контракты для взаимодействия (например, интерфейс для сервиса/репозитория)
 
-**Status**: ⬜ NOT STARTED  
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.2-note-entity)  
 **Link**: `backend/src/notes/note.interface.ts`
 
 ---
 
-### 1.3 Создать Repository слой (Data Access)
+### 1.3 Создать Repository слой (Data Access) - ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.3-note-repository)
 
 #### 1.3.1 Создать NoteRepository Interface
-- [ ] Файл `backend/src/notes/note.repository.interface.ts`
-- [ ] Метод `create(userId: string, title: string, content: string): Promise<Note>`
-- [ ] Метод `findById(id: string): Promise<Note | null>`
-- [ ] Метод `findByUserId(userId: string, skip: number, take: number): Promise<Note[]>`
-- [ ] Метод `findByUserIdCount(userId: string): Promise<number>`
-- [ ] Метод `update(id: string, title?: string, content?: string): Promise<Note>`
-- [ ] Метод `delete(id: string): Promise<void>`
+- [x] Файл `backend/src/notes/note.repository.interface.ts`
+- [x] Метод `create(userId: string, title: string, content: string): Promise<Note>`
+- [x] Метод `findById(id: string): Promise<Note | null>`
+- [x] Метод `findByUserId(userId: string, skip: number, take: number): Promise<Note[]>`
+- [x] Метод `findByUserIdCount(userId: string): Promise<number>`
+- [x] Метод `update(id: string, title?: string, content?: string): Promise<Note>`
+- [x] Метод `delete(id: string): Promise<void>`
 
-**Status**: ⬜ NOT STARTED  
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.3-note-repository)  
 **Link**: `backend/src/notes/note.repository.interface.ts`
 
 #### 1.3.2 Реализовать NoteRepository
-- [ ] Файл `backend/src/notes/note.repository.ts`
-- [ ] Внедри `PrismaService` через constructor
-- [ ] Реализуй маппинг: Prisma Model -> Domain Entity
-- [ ] Методы работают ТОЛЬКО с `prisma.note`
-- [ ] Не должно быть бизнес-логики, только CRUD и маппинг
+- [x] Файл `backend/src/notes/note.repository.ts`
+- [x] Внедри `PrismaService` через constructor (dependency injection)
+- [x] Реализуй все методы из интерфейса
+- [x] Методы работают ТОЛЬКО с `prisma.note` (инкапсуляция Prisma логики)
+- [x] Не должно быть бизнес-логики, только CRUD операции
 
-**Status**: ⬜ NOT STARTED  
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.3-note-repository)  
 **Link**: `backend/src/notes/note.repository.ts`
 
 #### 1.3.3 Написать Unit тесты для Repository
-- [ ] Файл `backend/tests/notes/note.repository.spec.ts`
-- [ ] Mock Prisma Client
-- [ ] Проверить корректность маппинга данных
+- [x] Файл `backend/tests/notes/note.repository.spec.ts`
+- [x] Mock Prisma Client через jest.mock('@/database/prisma.service')
+- [x] Тест: `create()` вызывает `prisma.note.create()`
+- [x] Тест: `findById()` вызывает `prisma.note.findUnique()` и возвращает заметку
+- [x] Тест: `findByUserId()` вызывает `prisma.note.findMany()` с skip/take
+- [x] Тест: `findByUserIdCount()` вызывает `prisma.note.count()`
+- [x] Тест: `update()` вызывает `prisma.note.update()`
+- [x] Тест: `delete()` вызывает `prisma.note.delete()`
+- [x] Тест: обработка ошибок (PrismaClientKnownRequestError)
 
-**Status**: ⬜ NOT STARTED  
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.3-note-repository)  
 **Link**: `backend/tests/notes/note.repository.spec.ts`
 
 ---
