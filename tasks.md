@@ -83,7 +83,7 @@
 #### 1.4.1 Создать NoteService Interface
 - [ ] Файл `backend/src/notes/note.service.interface.ts`
 
-**Status**: ⬜ NOT STARTED
+**Status**: 🔄 IN PROGRESS (Branch: feature/task-1.4-note-service)  
 
 #### 1.4.2 Реализовать NoteService
 - [ ] Файл `backend/src/notes/note.service.ts`
