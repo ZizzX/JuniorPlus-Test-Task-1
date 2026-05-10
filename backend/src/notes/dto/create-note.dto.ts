@@ -2,12 +2,14 @@ import { IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreateNoteDto {
 	@IsString()
-	@MinLength(1, { message: 'Title must be at least 1 character' })
-	@MaxLength(255, { message: 'Title must not exceed 255 characters' })
+	@MinLength(1, { message: 'Заголовок должен содержать минимум 1 символ' })
+	@MaxLength(255, { message: 'Заголовок не должен превышать 255 символов' })
 	title!: string;
 
 	@IsString()
-	@MinLength(1, { message: 'Content must be at least 1 character' })
-	@MaxLength(10000, { message: 'Content must not exceed 10000 characters' })
+	@MinLength(1, { message: 'Содержимое должно содержать минимум 1 символ' })
+	@MaxLength(10000, {
+		message: 'Содержимое не должно превышать 10000 символов',
+	})
 	content!: string;
 }

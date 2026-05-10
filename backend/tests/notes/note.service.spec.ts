@@ -62,6 +62,7 @@ describe('NoteService', () => {
 			await service.getNoteById('1', 'user-1');
 		} catch (e: any) {
 			expect(e.statusCode).toBe(404);
+			expect(e.message).toBe('Заметка не найдена');
 		}
 	});
 
@@ -72,6 +73,9 @@ describe('NoteService', () => {
 			await service.getNoteById('1', 'user-2');
 		} catch (e: any) {
 			expect(e.statusCode).toBe(403);
+			expect(e.message).toBe(
+				'Доступ запрещен: вы не являетесь владельцем этой заметки'
+			);
 		}
 	});
 

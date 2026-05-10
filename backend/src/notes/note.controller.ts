@@ -63,7 +63,7 @@ export class NoteController extends BaseController implements INoteController {
 	private async getUserId(userEmail: string): Promise<string> {
 		const user = await this.userService.getUserInfo(userEmail);
 		if (!user) {
-			throw new HttpError(401, 'User not found', 'NoteController');
+			throw new HttpError(401, 'Пользователь не найден', 'NoteController');
 		}
 		return user.id;
 	}

@@ -131,11 +131,13 @@ describe('NoteController', () => {
 	});
 
 	it('GET /notes/:id - not found', async () => {
-		noteService.getNoteById.mockRejectedValue(new HttpError(404, 'Not Found'));
+		noteService.getNoteById.mockRejectedValue(
+			new HttpError(404, 'Заметка не найдена')
+		);
 		const res = await request(app).get('/notes/999');
 
 		expect(res.status).toBe(404);
-		expect(res.body.error).toBe('Not Found');
+		expect(res.body.error).toBe('Заметка не найдена');
 	});
 
 	it('PATCH /notes/:id - success', async () => {
@@ -151,11 +153,18 @@ describe('NoteController', () => {
 	});
 
 	it('PATCH /notes/:id - forbidden (not an owner)', async () => {
-		noteService.updateNote.mockRejectedValue(new HttpError(403, 'Forbidden'));
+		noteService.updateNote.mockRejectedValue(
+			new HttpError(
+				403,
+				'Доступ запрещен: вы не являетесь владельцем этой заметки'
+			)
+		);
 		const res = await request(app).patch('/notes/1').send({ title: 'Updated' });
 
 		expect(res.status).toBe(403);
-		expect(res.body.error).toBe('Forbidden');
+		expect(res.body.error).toBe(
+			'Доступ запрещен: вы не являетесь владельцем этой заметки'
+		);
 	});
 
 	it('DELETE /notes/:id - success', async () => {
@@ -170,6 +179,6 @@ describe('NoteController', () => {
 		userService.getUserInfo.mockResolvedValue(null);
 		const res = await request(app).get('/notes');
 		expect(res.status).toBe(401);
-		expect(res.body.error).toBe('User not found');
+		expect(res.body.error).toBe('Пользователь не найден');
 	});
 });

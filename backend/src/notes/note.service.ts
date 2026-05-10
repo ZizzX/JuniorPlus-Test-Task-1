@@ -12,11 +12,18 @@ export class NoteService implements INoteService {
 		@inject(TYPES.NoteRepository) private noteRepository: INoteRepository
 	) {}
 
-	async createNote(userId: string, { title, content }: CreateNoteDto): Promise<Note> {
+	async createNote(
+		userId: string,
+		{ title, content }: CreateNoteDto
+	): Promise<Note> {
 		return this.noteRepository.create(userId, title, content);
 	}
 
-	async getNotesByUser(userId: string, page: number, limit: number): Promise<{ notes: Note[]; total: number }> {
+	async getNotesByUser(
+		userId: string,
+		page: number,
+		limit: number
+	): Promise<{ notes: Note[]; total: number }> {
 		const skip = (page - 1) * limit;
 		const [notes, total] = await Promise.all([
 			this.noteRepository.findByUserId(userId, skip, limit),
@@ -28,15 +35,23 @@ export class NoteService implements INoteService {
 	async getNoteById(id: string, userId: string): Promise<Note> {
 		const note = await this.noteRepository.findById(id);
 		if (!note) {
-			throw new HttpError(404, 'Note not found', 'NoteService');
+			throw new HttpError(404, 'Заметка не найдена', 'NoteService');
 		}
 		if (note.userId !== userId) {
-			throw new HttpError(403, 'Forbidden: You do not own this note', 'NoteService');
+			throw new HttpError(
+				403,
+				'Доступ запрещен: вы не являетесь владельцем этой заметки',
+				'NoteService'
+			);
 		}
 		return note;
 	}
 
-	async updateNote(id: string, userId: string, dto: UpdateNoteDto): Promise<Note> {
+	async updateNote(
+		id: string,
+		userId: string,
+		dto: UpdateNoteDto
+	): Promise<Note> {
 		await this.getNoteById(id, userId); // Validates existence and ownership
 		return this.noteRepository.update(id, dto.title, dto.content);
 	}
