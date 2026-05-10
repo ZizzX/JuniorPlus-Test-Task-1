@@ -11,21 +11,41 @@ export class UserRepository implements IUserRepository {
 		@inject(TYPES.PrismaService) private prismaService: PrismaService
 	) {}
 
-	async create({ email, passwordHash, name }: User): Promise<UserModel> {
-		return this.prismaService.client.userModel.create({
-			data: {
-				email,
-				passwordHash,
-				name,
-			},
+	private mapToEntity(model: UserModel): User {
+		return new User(model.email, model.name, {
+			id: model.id,
+			passwordHash: model.passwordHash,
+			createdAt: model.createdAt,
+			updatedAt: model.updatedAt,
 		});
 	}
 
-	async find(email: string): Promise<UserModel | null> {
-		return this.prismaService.client.userModel.findFirst({
+	async create(user: User): Promise<User> {
+		const model = await this.prismaService.client.userModel.create({
+			data: {
+				email: user.email,
+				passwordHash: user.getPassword(),
+				name: user.name,
+			},
+		});
+		return this.mapToEntity(model);
+	}
+
+	async find(email: string): Promise<User | null> {
+		const model = await this.prismaService.client.userModel.findFirst({
 			where: {
 				email,
 			},
 		});
+		return model ? this.mapToEntity(model) : null;
+	}
+
+	async findById(id: string): Promise<User | null> {
+		const model = await this.prismaService.client.userModel.findUnique({
+			where: {
+				id,
+			},
+		});
+		return model ? this.mapToEntity(model) : null;
 	}
 }

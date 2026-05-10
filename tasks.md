@@ -134,13 +134,42 @@
 - [ ] 1.7 Зарегистрировать в DI контейнере (`main.ts`, `app.ts`)
 - [ ] 1.8 Добавить Swagger документацию
 - [ ] 1.9 Написать Integration тесты (полный API flow)
-- [ ] 1.10 Финальная проверка (lint, build, coverage)
+- [x] 1.10 Финальная проверка (lint, build, coverage)
 
-**Status**: 🔄 IN PROGRESS (Branch: feature/task-1.7-1.10-integration)  
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.7-1.10-integration)
+
+---
+
+### 1.11 Рефакторинг User Module (Clean Architecture & Decoupling) - ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.11-refactor-user-module)
+
+#### 1.11.1 Обновить User Domain Entity
+- [x] Очистить `backend/src/users/user.entity.ts` от любых зависимостей от внешних библиотек (кроме bcryptjs для хэширования, если это бизнес-логика сущности)
+- [x] Убедиться, что сущность полностью описывает доменную модель пользователя
+
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.11-refactor-user-module)
+
+#### 1.11.2 Рефакторинг UserRepository (Mapping)
+- [x] Изменить возвращаемые типы в `IUserRepository` с `UserModel` (Prisma) на `User` (Domain Entity)
+- [x] Реализовать маппинг `Prisma Model -> Domain Entity` in `UserRepository`
+- [x] Убедиться, что Prisma логика полностью инкапсулирована
+
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.11-refactor-user-module)
+
+#### 1.11.3 Рефакторинг UserService
+- [x] Изменить `IUserService` и `UserService`, чтобы они работали только с Domain Entity `User`
+- [x] Обновить логику взаимодействия с репозиторием
+
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.11-refactor-user-module)
+
+#### 1.11.4 Обновить Unit и Integration тесты для Users
+- [x] Обновить тесты репозитория и сервиса с учетом маппинга
+- [x] Убедиться, что тесты покрывают все сценарии и проходят успешно
+
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.11-refactor-user-module)
+
 ---
 
 ## 📌 ФАЗА 2: PostgreSQL Setup & Database Migration
-
 ### 2.1 Настройка БД
 - [ ] Настроить PostgreSQL (локально или Docker)
 - [ ] Обновить `DATABASE_URL` в `.env`

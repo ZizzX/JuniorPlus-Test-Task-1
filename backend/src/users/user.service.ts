@@ -5,8 +5,6 @@ import { ILogger } from '../logger/logger.interface';
 import { User } from './user.entity';
 import { IUserService } from './user.service.interface';
 import { IUserRepository } from './user.repository.interface';
-import { UserModel } from '../generated/prisma/client';
-import { sign } from 'jsonwebtoken';
 
 @injectable()
 export class UserService implements IUserService {
@@ -20,7 +18,7 @@ export class UserService implements IUserService {
 		email: string,
 		name: string,
 		password: string
-	): Promise<UserModel | null> {
+	): Promise<User | null> {
 		const existedUser = await this.userRepository.find(email);
 		if (existedUser) {
 			this.logger.warn(
@@ -47,15 +45,10 @@ export class UserService implements IUserService {
 			return false;
 		}
 
-		const userEntity = new User(
-			existedUser.email,
-			existedUser.name,
-			existedUser.passwordHash
-		);
-		return userEntity.comparePassword(password);
+		return existedUser.comparePassword(password);
 	}
 
-	async getUserInfo(email: string): Promise<UserModel | null> {
+	async getUserInfo(email: string): Promise<User | null> {
 		return this.userRepository.find(email);
 	}
 }

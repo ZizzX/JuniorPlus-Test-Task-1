@@ -1,11 +1,11 @@
-import { UserModel } from '../generated/prisma/client';
+import { User } from './user.entity';
 
 export interface IUserService {
 	createUser(
 		email: string,
 		name: string,
 		password: string
-	): Promise<UserModel | null>;
+	): Promise<User | null>;
 	validateUser(email: string, password: string): Promise<boolean>;
-	getUserInfo(email: string): Promise<UserModel | null>;
+	getUserInfo(email: string): Promise<User | null>;
 }
