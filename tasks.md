@@ -78,39 +78,39 @@
 
 ---
 
-### 1.4 Создать Service слой (Business Logic)
+### 1.4 Создать Service слой (Business Logic) - ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.4-note-service)
 
 #### 1.4.1 Создать NoteService Interface
-- [ ] Файл `backend/src/notes/note.service.interface.ts`
+- [x] Файл `backend/src/notes/note.service.interface.ts`
 
-**Status**: 🔄 IN PROGRESS (Branch: feature/task-1.4-note-service)  
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.4-note-service)  
 
 #### 1.4.2 Реализовать NoteService
-- [ ] Файл `backend/src/notes/note.service.ts`
-- [ ] Внедри `NoteRepository`
-- [ ] **createNote()**: бизнес-валидация, создание
-- [ ] **getNoteById()**: проверка владельца (403 Forbidden если не свой)
-- [ ] Остальные методы CRUD с проверкой прав доступа
+- [x] Файл `backend/src/notes/note.service.ts`
+- [x] Внедри `NoteRepository`
+- [x] **createNote()**: бизнес-валидация, создание
+- [x] **getNoteById()**: проверка владельца (403 Forbidden если не свой)
+- [x] Остальные методы CRUD с проверкой прав доступа
 
-**Status**: ⬜ NOT STARTED
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.4-note-service)  
 
 #### 1.4.3 Написать Unit тесты для Service
-- [ ] Файл `backend/tests/notes/note.service.spec.ts`
-- [ ] Mock NoteRepository
-- [ ] Тесты на бизнес-логику и права доступа (403 Forbidden)
+- [x] Файл `backend/tests/notes/note.service.spec.ts`
+- [x] Mock NoteRepository
+- [x] Тесты на бизнес-логику и права доступа (403 Forbidden)
 
-**Status**: ⬜ NOT STARTED
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.4-note-service)  
 
 ---
 
-### 1.5 Создать DTO и Валидацию
+### 1.5 Создать DTO и Валидацию - ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.4-note-service)
 
 #### 1.5.1 Создать CreateNoteDto и UpdateNoteDto
-- [ ] Файл `backend/src/notes/dto/create-note.dto.ts`
-- [ ] Файл `backend/src/notes/dto/update-note.dto.ts`
-- [ ] Использовать `class-validator` декораторы
+- [x] Файл `backend/src/notes/dto/create-note.dto.ts`
+- [x] Файл `backend/src/notes/dto/update-note.dto.ts`
+- [x] Использовать `class-validator` декораторы
 
-**Status**: ⬜ NOT STARTED
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.4-note-service)  
 
 ---
 
