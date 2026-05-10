@@ -11,6 +11,12 @@ import { CreateNoteDto, UpdateNoteDto } from './dto';
 import { IUserService } from '../users/user.service.interface';
 import { HttpError } from '../exception-filter/http-error.class';
 
+/**
+ * @swagger
+ * tags:
+ *   name: Notes
+ *   description: Note management
+ */
 @injectable()
 export class NoteController extends BaseController implements INoteController {
 	constructor(
@@ -62,13 +68,43 @@ export class NoteController extends BaseController implements INoteController {
 		return user.id;
 	}
 
+	/**
+	 * @swagger
+	 * /notes:
+	 *   post:
+	 *     summary: Create a new note
+	 *     tags: [Notes]
+	 *     security:
+	 *       - bearerAuth: []
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             type: object
+	 *             required:
+	 *               - title
+	 *               - content
+	 *             properties:
+	 *               title:
+	 *                 type: string
+	 *               content:
+	 *                 type: string
+	 *     responses:
+	 *       201:
+	 *         description: Note created
+	 *       401:
+	 *         description: Unauthorized
+	 *       422:
+	 *         description: Validation failed
+	 */
 	public async createNote(
 		req: Request,
 		res: Response,
 		next: NextFunction
 	): Promise<void> {
 		try {
-			const userId = await this.getUserId(req.userEmail);
+			const userId = await this.getUserId((req as any).userEmail);
 			const note = await this.noteService.createNote(userId, req.body);
 			this.created(res, note);
 		} catch (err) {
@@ -76,13 +112,38 @@ export class NoteController extends BaseController implements INoteController {
 		}
 	}
 
+	/**
+	 * @swagger
+	 * /notes:
+	 *   get:
+	 *     summary: Get all notes for the current user
+	 *     tags: [Notes]
+	 *     security:
+	 *       - bearerAuth: []
+	 *     parameters:
+	 *       - in: query
+	 *         name: page
+	 *         schema:
+	 *           type: integer
+	 *           default: 1
+	 *       - in: query
+	 *         name: limit
+	 *         schema:
+	 *           type: integer
+	 *           default: 10
+	 *     responses:
+	 *       200:
+	 *         description: List of notes
+	 *       401:
+	 *         description: Unauthorized
+	 */
 	public async getNotesByUser(
 		req: Request,
 		res: Response,
 		next: NextFunction
 	): Promise<void> {
 		try {
-			const userId = await this.getUserId(req.userEmail);
+			const userId = await this.getUserId((req as any).userEmail);
 			const page = Number(req.query.page) || 1;
 			const limit = Number(req.query.limit) || 10;
 			const result = await this.noteService.getNotesByUser(userId, page, limit);
@@ -96,13 +157,35 @@ export class NoteController extends BaseController implements INoteController {
 		}
 	}
 
+	/**
+	 * @swagger
+	 * /notes/{id}:
+	 *   get:
+	 *     summary: Get a note by ID
+	 *     tags: [Notes]
+	 *     security:
+	 *       - bearerAuth: []
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     responses:
+	 *       200:
+	 *         description: Note details
+	 *       403:
+	 *         description: Forbidden
+	 *       404:
+	 *         description: Note not found
+	 */
 	public async getNoteById(
 		req: Request,
 		res: Response,
 		next: NextFunction
 	): Promise<void> {
 		try {
-			const userId = await this.getUserId(req.userEmail);
+			const userId = await this.getUserId((req as any).userEmail);
 			const note = await this.noteService.getNoteById(
 				req.params.id as string,
 				userId
@@ -113,13 +196,45 @@ export class NoteController extends BaseController implements INoteController {
 		}
 	}
 
+	/**
+	 * @swagger
+	 * /notes/{id}:
+	 *   patch:
+	 *     summary: Update a note
+	 *     tags: [Notes]
+	 *     security:
+	 *       - bearerAuth: []
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     requestBody:
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             type: object
+	 *             properties:
+	 *               title:
+	 *                 type: string
+	 *               content:
+	 *                 type: string
+	 *     responses:
+	 *       200:
+	 *         description: Note updated
+	 *       403:
+	 *         description: Forbidden
+	 *       404:
+	 *         description: Note not found
+	 */
 	public async updateNote(
 		req: Request,
 		res: Response,
 		next: NextFunction
 	): Promise<void> {
 		try {
-			const userId = await this.getUserId(req.userEmail);
+			const userId = await this.getUserId((req as any).userEmail);
 			const note = await this.noteService.updateNote(
 				req.params.id as string,
 				userId,
@@ -131,13 +246,35 @@ export class NoteController extends BaseController implements INoteController {
 		}
 	}
 
+	/**
+	 * @swagger
+	 * /notes/{id}:
+	 *   delete:
+	 *     summary: Delete a note
+	 *     tags: [Notes]
+	 *     security:
+	 *       - bearerAuth: []
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     responses:
+	 *       204:
+	 *         description: Note deleted
+	 *       403:
+	 *         description: Forbidden
+	 *       404:
+	 *         description: Note not found
+	 */
 	public async deleteNote(
 		req: Request,
 		res: Response,
 		next: NextFunction
 	): Promise<void> {
 		try {
-			const userId = await this.getUserId(req.userEmail);
+			const userId = await this.getUserId((req as any).userEmail);
 			await this.noteService.deleteNote(req.params.id as string, userId);
 			this.send(res, 204, null);
 		} catch (err) {

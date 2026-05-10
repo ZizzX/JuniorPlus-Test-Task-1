@@ -11,6 +11,7 @@ import { IConfigService } from './config/config.service.interface';
 import { IExceptionFilter } from './exception-filter/exception.filter.interface';
 import { ILogger } from './logger/logger.interface';
 import { IUserController } from './users/user.controller.interface';
+import { INoteController } from './notes/note.controller.interface';
 import { PrismaService } from './database/prisma.service';
 import { IMiddleware } from './common/middleware.interface';
 import { setupSwagger } from './common/swagger.config';
@@ -22,12 +23,14 @@ export class App {
 	app: Express;
 	server!: Server;
 	private userController: IUserController;
+	private noteController: INoteController;
 	private exceptionFilter: IExceptionFilter;
 	private configService: IConfigService;
 
 	constructor(
 		@inject(TYPES.LoggerService) logger: ILogger,
 		@inject(TYPES.UserController) userController: IUserController,
+		@inject(TYPES.NoteController) noteController: INoteController,
 		@inject(TYPES.ExceptionFilter) exceptionFilter: IExceptionFilter,
 		@inject(TYPES.ConfigService) configService: IConfigService,
 		@inject(TYPES.PrismaService) private prismaService: PrismaService,
@@ -36,6 +39,7 @@ export class App {
 		this.app = express();
 		this.logger = logger;
 		this.userController = userController;
+		this.noteController = noteController;
 		this.exceptionFilter = exceptionFilter;
 		this.configService = configService;
 		this.prismaService = prismaService;
@@ -51,7 +55,8 @@ export class App {
 				limit: 100,
 				standardHeaders: 'draft-7',
 				legacyHeaders: false,
-				message: 'Too many requests from this IP, please try again after 15 minutes',
+				message:
+					'Too many requests from this IP, please try again after 15 minutes',
 			})
 		);
 
@@ -68,6 +73,7 @@ export class App {
 			});
 		});
 		this.app.use('/users', this.userController.getRouter());
+		this.app.use('/notes', this.noteController.getRouter());
 		setupSwagger(this.app);
 	}
 
@@ -130,7 +136,9 @@ export class App {
 			}
 
 			setTimeout(() => {
-				this.logger.error('Could not close connections in time, forcefully shutting down');
+				this.logger.error(
+					'Could not close connections in time, forcefully shutting down'
+				);
 				process.exit(1);
 			}, 10000);
 		};
@@ -146,10 +154,7 @@ export class App {
 		this.useExceptionFilters();
 
 		await this.prismaService.connect();
-		
-		// If already in test mode, we might not want to start the actual listener if supertest handles it
-		// but typically we need it for init to be complete. 
-		// Supertest can take the express instance directly, but this.server needs to be populated.
+
 		this.server = this.app.listen(this.port, () => {
 			this.logger.info(`Server is running on http://localhost:${this.port}`);
 		});

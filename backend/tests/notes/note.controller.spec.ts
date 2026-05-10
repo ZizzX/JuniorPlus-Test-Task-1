@@ -150,6 +150,14 @@ describe('NoteController', () => {
 		});
 	});
 
+	it('PATCH /notes/:id - forbidden (not an owner)', async () => {
+		noteService.updateNote.mockRejectedValue(new HttpError(403, 'Forbidden'));
+		const res = await request(app).patch('/notes/1').send({ title: 'Updated' });
+
+		expect(res.status).toBe(403);
+		expect(res.body.error).toBe('Forbidden');
+	});
+
 	it('DELETE /notes/:id - success', async () => {
 		noteService.deleteNote.mockResolvedValue(undefined);
 		const res = await request(app).delete('/notes/1');

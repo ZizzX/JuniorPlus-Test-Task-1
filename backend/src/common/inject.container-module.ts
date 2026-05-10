@@ -17,6 +17,13 @@ import { TYPES } from './inject.constants';
 import { AuthMiddleware } from './auth.middleware';
 import { IMiddleware } from './middleware.interface';
 
+import { NoteRepository } from '../notes/note.repository';
+import { INoteRepository } from '../notes/note.repository.interface';
+import { NoteService } from '../notes/note.service';
+import { INoteService } from '../notes/note.service.interface';
+import { NoteController } from '../notes/note.controller';
+import { INoteController } from '../notes/note.controller.interface';
+
 const containerModule = new ContainerModule(({ bind }) => {
 	bind<PrismaService>(TYPES.PrismaService).to(PrismaService).inSingletonScope();
 	bind<IUserRepository>(TYPES.UserRepository)
@@ -33,6 +40,13 @@ const containerModule = new ContainerModule(({ bind }) => {
 		.to(UserController)
 		.inSingletonScope();
 	bind<IUserService>(TYPES.UserService).to(UserService);
+	bind<INoteRepository>(TYPES.NoteRepository)
+		.to(NoteRepository)
+		.inSingletonScope();
+	bind<INoteService>(TYPES.NoteService).to(NoteService).inSingletonScope();
+	bind<INoteController>(TYPES.NoteController)
+		.to(NoteController)
+		.inSingletonScope();
 	bind<IMiddleware>(TYPES.AuthMiddleware).to(AuthMiddleware);
 	bind<App>(TYPES.Application).to(App).inSingletonScope();
 });

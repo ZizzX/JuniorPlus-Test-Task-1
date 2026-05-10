@@ -129,15 +129,14 @@
 
 ---
 
-### 1.7-1.10 Интеграция, Swagger, Интеграционные тесты
+### 1.7-1.10 Интеграция, Swagger, Интеграционные тесты - 🔄 IN PROGRESS (Branch: feature/task-1.7-1.10-integration)
 
 - [ ] 1.7 Зарегистрировать в DI контейнере (`main.ts`, `app.ts`)
 - [ ] 1.8 Добавить Swagger документацию
 - [ ] 1.9 Написать Integration тесты (полный API flow)
 - [ ] 1.10 Финальная проверка (lint, build, coverage)
 
-**Status**: ⬜ NOT STARTED
-
+**Status**: 🔄 IN PROGRESS (Branch: feature/task-1.7-1.10-integration)  
 ---
 
 ## 📌 ФАЗА 2: PostgreSQL Setup & Database Migration

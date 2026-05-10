@@ -89,6 +89,24 @@ describe('NoteService', () => {
 		expect(result.title).toBe('Updated');
 	});
 
+	it('updateNote() - only content', async () => {
+		repository.findById.mockResolvedValue(mockNote);
+		repository.update.mockResolvedValue({
+			...mockNote,
+			content: 'New Content',
+		} as Note);
+
+		const result = await service.updateNote('1', 'user-1', {
+			content: 'New Content',
+		});
+		expect(repository.update).toHaveBeenCalledWith(
+			'1',
+			undefined,
+			'New Content'
+		);
+		expect(result.content).toBe('New Content');
+	});
+
 	it('deleteNote() should check ownership and delete', async () => {
 		repository.findById.mockResolvedValue(mockNote);
 		await service.deleteNote('1', 'user-1');
