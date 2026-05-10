@@ -114,15 +114,18 @@
 
 ---
 
-### 1.6 Создать Controller слой (HTTP Handlers)
+### 1.6 Создать Controller слой (HTTP Handlers) - ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.6-note-controller)
 
 #### 1.6.1 Реализовать NoteController
-- [ ] Файл `backend/src/notes/note.controller.ts`
-- [ ] Используй `inversify` для DI
-- [ ] Эндпоинты: POST /notes, GET /notes, GET /notes/:id, PATCH /notes/:id, DELETE /notes/:id
-- [ ] Применить `AuthGuard` ко всем маршрутам
+- [x] Файл `backend/src/notes/note.controller.ts`
 
-**Status**: ⬜ NOT STARTED
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.6-note-controller)  
+
+#### 1.6.2 Реализовать эндпоинты CRUD
+- [x] POST /notes, GET /notes, GET /notes/:id, PATCH /notes/:id, DELETE /notes/:id
+- [x] Применить `AuthGuard` ко всем маршрутам
+
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-1.6-note-controller)  
 
 ---
 

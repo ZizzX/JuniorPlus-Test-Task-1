@@ -1,3 +1,4 @@
+/// <reference types="jest" />
 import 'reflect-metadata';
 import { NoteRepository } from '../../src/notes/note.repository';
 import { PrismaService } from '../../src/database/prisma.service';
@@ -35,7 +36,11 @@ describe('NoteRepository', () => {
 
 	it('create() should call prisma.noteModel.create and return entity', async () => {
 		mockPrisma.noteModel.create.mockResolvedValue(mockNoteModel);
-		const result = await repository.create('user-1', 'Test Title', 'Test Content');
+		const result = await repository.create(
+			'user-1',
+			'Test Title',
+			'Test Content'
+		);
 
 		expect(mockPrisma.noteModel.create).toHaveBeenCalledWith({
 			data: { userId: 'user-1', title: 'Test Title', content: 'Test Content' },
@@ -48,7 +53,9 @@ describe('NoteRepository', () => {
 		mockPrisma.noteModel.findUnique.mockResolvedValue(mockNoteModel);
 		const result = await repository.findById('1');
 
-		expect(mockPrisma.noteModel.findUnique).toHaveBeenCalledWith({ where: { id: '1' } });
+		expect(mockPrisma.noteModel.findUnique).toHaveBeenCalledWith({
+			where: { id: '1' },
+		});
 		expect(result).toBeInstanceOf(Note);
 		expect(result?.id).toBe(mockNoteModel.id);
 	});
@@ -76,7 +83,9 @@ describe('NoteRepository', () => {
 		mockPrisma.noteModel.count.mockResolvedValue(5);
 		const result = await repository.findByUserIdCount('user-1');
 		expect(result).toBe(5);
-		expect(mockPrisma.noteModel.count).toHaveBeenCalledWith({ where: { userId: 'user-1' } });
+		expect(mockPrisma.noteModel.count).toHaveBeenCalledWith({
+			where: { userId: 'user-1' },
+		});
 	});
 
 	it('update() should call prisma.noteModel.update', async () => {
@@ -92,6 +101,8 @@ describe('NoteRepository', () => {
 
 	it('delete() should call prisma.noteModel.delete', async () => {
 		await repository.delete('1');
-		expect(mockPrisma.noteModel.delete).toHaveBeenCalledWith({ where: { id: '1' } });
+		expect(mockPrisma.noteModel.delete).toHaveBeenCalledWith({
+			where: { id: '1' },
+		});
 	});
 });

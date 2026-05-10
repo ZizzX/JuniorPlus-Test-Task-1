@@ -32,7 +32,10 @@ describe('NoteService', () => {
 
 	it('createNote() should call repository.create', async () => {
 		repository.create.mockResolvedValue(mockNote);
-		const result = await service.createNote('user-1', { title: 'Test', content: 'Content' });
+		const result = await service.createNote('user-1', {
+			title: 'Test',
+			content: 'Content',
+		});
 		expect(repository.create).toHaveBeenCalledWith('user-1', 'Test', 'Content');
 		expect(result).toBe(mockNote);
 	});
@@ -74,9 +77,14 @@ describe('NoteService', () => {
 
 	it('updateNote() should check ownership and update', async () => {
 		repository.findById.mockResolvedValue(mockNote);
-		repository.update.mockResolvedValue({ ...mockNote, title: 'Updated' } as Note);
+		repository.update.mockResolvedValue({
+			...mockNote,
+			title: 'Updated',
+		} as Note);
 
-		const result = await service.updateNote('1', 'user-1', { title: 'Updated' });
+		const result = await service.updateNote('1', 'user-1', {
+			title: 'Updated',
+		});
 		expect(repository.update).toHaveBeenCalledWith('1', 'Updated', undefined);
 		expect(result.title).toBe('Updated');
 	});
