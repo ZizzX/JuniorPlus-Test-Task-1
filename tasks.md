@@ -201,11 +201,12 @@
 **Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.1-frontend-init)
 > Примечание: Установлен Tailwind CSS v4 с использованием плагина @tailwindcss/vite. Структура проекта реорганизована под Feature-Sliced Design. Boilerplate очищен.
 
-### 3.2 Слой Shared (API, UI Kit)
-- [ ] Настроить API клиент (Axios) с JWT interceptor
-- [ ] Создать базовые UI компоненты (Button, Input, Card)
+### 3.2 Слой Shared (API, UI Kit) - ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.2-shared-layer)
+- [x] Настроить API клиент (Axios) с JWT interceptor
+- [x] Создать базовые UI компоненты (Button, Input, Card)
 
-**Status**: ⬜ NOT STARTED
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.2-shared-layer)
+> Примечание: Настроен Axios с интерцепторами для JWT. Созданы базовые компоненты UiButton, UiInput, UiCard в слое Shared. Добавлена демо-страница в App.vue.
 
 ### 3.3 Слой Entities (Notes, User)
 - [ ] Создать типы и интерфейсы сущностей
