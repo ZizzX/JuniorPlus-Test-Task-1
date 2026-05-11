@@ -6,8 +6,10 @@ export const useNotesQuery = () => {
   return useQuery({
     queryKey: ["notes"],
     queryFn: async () => {
-      const { data } = await api.get<Note[]>("/notes");
-      return data;
+      const { data } = await api.get<{ notes: Note[]; total: number }>(
+        "/notes",
+      );
+      return data.notes;
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
