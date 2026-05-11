@@ -231,6 +231,16 @@
 **Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.5-widgets-pages)
 > Примечание: Реализованы виджеты NavBar и NoteList. Созданы страницы Dashboard, Login и Register. Настроен Vue Router с Middleware (guards) для проверки авторизации. App.vue переведен на использование router-view.
 
+### 3.6 Vue Query Integration & Server-State Refactoring - 🔄 IN PROGRESS (Branch: feature/task-3.6-vue-query-integration)
+- [ ] Установить @tanstack/vue-query
+- [ ] Настроить VueQueryPlugin в приложении
+- [ ] Вынести запросы в entities/note/api/useNotesQuery.ts
+- [ ] Вынести мутации в соответствующие фичи (create, delete, edit)
+- [ ] Отрефакторить DashboardPage.vue и NoteList.vue (убрать гонки запросов, добавить лоадеры)
+- [ ] Очистить Pinia store от серверного состояния
+
+**Status**: 🔄 IN PROGRESS (Branch: feature/task-3.6-vue-query-integration)
+
 ---
 
 ## 📌 ФАЗА 4: Docker Compose Integration - ✅ DONE (Date: 2026-05-11, Branch: feature/phase-4-docker-integration)
@@ -267,10 +277,10 @@
 - ✅ Final Polish & Documentation
 
 ### In Progress
-- ⬜ None
+- 🔄 Phase 3.6: Vue Query Integration
 
 ### TODO (Prioritized)
-- 🏆 **PROJECT COMPLETED**
+- ⬜ Complete frontend refactoring with Vue Query
 
 ---
 
