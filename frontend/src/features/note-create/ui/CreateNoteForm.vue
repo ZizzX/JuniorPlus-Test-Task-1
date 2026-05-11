@@ -2,10 +2,9 @@
 import { ref } from "vue";
 import { UiInput, UiButton } from "@/shared/ui";
 import { useNoteStore } from "@/entities/note";
-import { useAuthStore } from "@/entities/user";
 
 const noteStore = useNoteStore();
-const authStore = useAuthStore();
+
 const title = ref("");
 const content = ref("");
 
