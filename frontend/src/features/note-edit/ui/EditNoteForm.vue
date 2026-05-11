@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { UiInput, UiButton } from "@/shared/ui";
-import { useNoteStore, type Note } from "@/entities/note";
+import { type Note } from "@/entities/note";
+import { useEditNoteMutation } from "../api/useEditNoteMutation";
 
 const props = defineProps<{
     note: Note;
@@ -12,15 +13,23 @@ const emit = defineEmits<{
     (e: "cancel"): void;
 }>();
 
-const noteStore = useNoteStore();
+const { mutateAsync: editNote, isPending } = useEditNoteMutation();
 const title = ref(props.note.title);
 const content = ref(props.note.content);
 
 const handleSubmit = async () => {
     if (!title.value) return;
 
-    await noteStore.updateNote(props.note.id, title.value, content.value);
-    emit("success");
+    try {
+        await editNote({
+            id: props.note.id,
+            title: title.value,
+            content: content.value,
+        });
+        emit("success");
+    } catch (error) {
+        console.error("Failed to edit note:", error);
+    }
 };
 </script>
 
@@ -31,6 +40,7 @@ const handleSubmit = async () => {
             label="Title"
             placeholder="Note title"
             required
+            :disabled="isPending"
         />
         <div class="flex flex-col gap-1 w-full">
             <label class="text-sm font-medium text-gray-700">Content</label>
@@ -39,13 +49,24 @@ const handleSubmit = async () => {
                 class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 placeholder="Note content..."
                 rows="3"
+                :disabled="isPending"
             ></textarea>
         </div>
         <div class="flex gap-2">
-            <UiButton type="submit" variant="primary" class="flex-1">
+            <UiButton
+                type="submit"
+                variant="primary"
+                class="flex-1"
+                :loading="isPending"
+            >
                 Save Changes
             </UiButton>
-            <UiButton type="button" variant="ghost" @click="emit('cancel')">
+            <UiButton
+                type="button"
+                variant="ghost"
+                @click="emit('cancel')"
+                :disabled="isPending"
+            >
                 Cancel
             </UiButton>
         </div>

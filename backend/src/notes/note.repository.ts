@@ -3,7 +3,7 @@ import { TYPES } from '../common/inject.constants';
 import { Note } from './note.entity';
 import { INoteRepository } from './note.repository.interface';
 import { PrismaService } from '../database/prisma.service';
-import { NoteModel } from '../generated/prisma/client';
+import { NoteModel } from '@prisma/client';
 
 @injectable()
 export class NoteRepository implements INoteRepository {
@@ -40,14 +40,18 @@ export class NoteRepository implements INoteRepository {
 		return model ? this.mapToEntity(model) : null;
 	}
 
-	async findByUserId(userId: string, skip: number, take: number): Promise<Note[]> {
+	async findByUserId(
+		userId: string,
+		skip: number,
+		take: number
+	): Promise<Note[]> {
 		const models = await this.prismaService.client.noteModel.findMany({
 			where: { userId },
 			skip,
 			take,
 			orderBy: { createdAt: 'desc' },
 		});
-		return models.map((model) => this.mapToEntity(model));
+		return models.map(model => this.mapToEntity(model));
 	}
 
 	async findByUserIdCount(userId: string): Promise<number> {

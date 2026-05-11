@@ -1,16 +1,8 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
 import BaseLayout from "@/app/layouts/BaseLayout.vue";
 import { NoteList } from "@/widgets/note-list";
 import { CreateNoteForm } from "@/features/note-create";
 import { UiCard } from "@/shared/ui";
-import { useNoteStore } from "@/entities/note";
-
-const noteStore = useNoteStore();
-
-onMounted(() => {
-    noteStore.fetchNotes();
-});
 </script>
 
 <template>

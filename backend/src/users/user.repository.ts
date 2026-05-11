@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import { TYPES } from '../common/inject.constants';
 import { User } from './user.entity';
 import { IUserRepository } from './user.repository.interface';
-import { UserModel } from '../generated/prisma/client';
+import { UserModel } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 
 @injectable()

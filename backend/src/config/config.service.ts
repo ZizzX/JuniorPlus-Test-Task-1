@@ -12,7 +12,7 @@ export class ConfigService implements IConfigService {
 		const result: DotenvConfigOutput = config();
 		if (result.error) {
 			this.logger.error(
-				'[ConfigService] Не удалось прочитать файл .env или он отсутствует'
+				`[ConfigService] Файл .env не найден, используются переменные окружения.`
 			);
 			// В критических системах здесь можно выбросить ошибку: throw new Error('Missing .env file');
 			this.config = process.env as DotenvParseOutput; // Fallback на переменные окружения системы

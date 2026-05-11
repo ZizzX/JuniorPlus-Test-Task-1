@@ -10,6 +10,7 @@ RUN npm install
 
 COPY . .
 
+RUN rm -rf dist
 RUN DATABASE_URL=postgresql://localhost npx prisma generate
 RUN npm run build
 

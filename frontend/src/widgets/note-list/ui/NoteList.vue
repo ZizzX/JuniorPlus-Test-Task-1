@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useNoteStore } from "@/entities/note";
+import { useNotesQuery } from "@/entities/note";
 import { UiCard, UiButton } from "@/shared/ui";
 import { EditNoteForm } from "@/features/note-edit";
 import { DeleteNoteButton } from "@/features/note-delete";
 
-const noteStore = useNoteStore();
+const { data: notes, isLoading, isError } = useNotesQuery();
 const editingNoteId = ref<string | null>(null);
 
 const startEdit = (id: string) => {
@@ -19,14 +19,25 @@ const stopEdit = () => {
 
 <template>
     <div class="space-y-4">
+        <div v-if="isLoading" class="text-center py-12">
+            <p class="text-gray-500">Loading notes...</p>
+        </div>
+
         <div
-            v-if="noteStore.notes.length === 0"
+            v-else-if="isError"
+            class="text-center py-12 bg-red-50 text-red-600 rounded-lg"
+        >
+            <p>Error loading notes. Please try again later.</p>
+        </div>
+
+        <div
+            v-else-if="!notes || notes.length === 0"
             class="text-center py-12 bg-white rounded-lg border-2 border-dashed border-gray-300"
         >
             <p class="text-gray-500">No notes yet. Create your first one!</p>
         </div>
 
-        <div v-for="note in noteStore.notes" :key="note.id">
+        <div v-else v-for="note in notes" :key="note.id">
             <UiCard v-if="editingNoteId === note.id" title="Edit Note">
                 <EditNoteForm
                     :note="note"

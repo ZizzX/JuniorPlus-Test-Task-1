@@ -3,7 +3,7 @@
 		"dev": "ts-node-dev --respawn --transpile-only src/main.ts",
 		"dev:debug": "ts-node-dev --respawn --transpile-only --inspect=localhost:9229 src/main.ts -r ts-node/register",
 		"build": "tsc -p tsconfig.json",
-		"start": "node dist/main.js",
+		"start": "node dist/src/main.js",
 		"prisma:generate": "prisma generate",
 		"prisma:migrate": "prisma migrate dev",
 		"lint": "eslint src/**/*.ts",

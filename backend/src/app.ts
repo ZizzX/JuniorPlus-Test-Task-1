@@ -47,37 +47,29 @@ export class App {
 	}
 
 	useMiddleware() {
-		this.app.use(
-			cors({
-				origin: '*',
-				methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-				allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-				preflightContinue: false,
-				optionsSuccessStatus: 204,
-			})
-		);
-		this.app.use(
-			helmet({
-				contentSecurityPolicy: false,
-				crossOriginResourcePolicy: false,
-			})
-		);
-		this.app.use(
-			rateLimit({
-				windowMs: 15 * 60 * 1000,
-				limit: 100,
-				standardHeaders: 'draft-7',
-				legacyHeaders: false,
-				message:
-					'Too many requests from this IP, please try again after 15 minutes',
-			})
-		);
+		// CORS MUST BE FIRST
+		this.app.use((req, res, next) => {
+			res.header('Access-Control-Allow-Origin', '*');
+			res.header(
+				'Access-Control-Allow-Methods',
+				'GET, POST, PUT, DELETE, PATCH, OPTIONS'
+			);
+			res.header(
+				'Access-Control-Allow-Headers',
+				'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+			);
+			if (req.method === 'OPTIONS') {
+				return res.status(204).send();
+			}
+			next();
+		});
 
 		this.app.use(express.json());
 		this.app.use(this.authMiddleware.execute.bind(this.authMiddleware));
 	}
 
 	useRoutes() {
+		this.logger.info('[App] Registering health check route...');
 		this.app.get('/health', (req, res) => {
 			res.status(200).json({
 				status: 'ok',
@@ -85,8 +77,11 @@ export class App {
 				timestamp: new Date().toISOString(),
 			});
 		});
+		this.logger.info('[App] Registering user routes...');
 		this.app.use('/users', this.userController.getRouter());
+		this.logger.info('[App] Registering note routes...');
 		this.app.use('/notes', this.noteController.getRouter());
+		this.logger.info('[App] Setting up Swagger...');
 		setupSwagger(this.app);
 	}
 

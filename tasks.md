@@ -231,15 +231,16 @@
 **Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.5-widgets-pages)
 > Примечание: Реализованы виджеты NavBar и NoteList. Созданы страницы Dashboard, Login и Register. Настроен Vue Router с Middleware (guards) для проверки авторизации. App.vue переведен на использование router-view.
 
-### 3.6 Vue Query Integration & Server-State Refactoring - 🔄 IN PROGRESS (Branch: feature/task-3.6-vue-query-integration)
-- [ ] Установить @tanstack/vue-query
-- [ ] Настроить VueQueryPlugin в приложении
-- [ ] Вынести запросы в entities/note/api/useNotesQuery.ts
-- [ ] Вынести мутации в соответствующие фичи (create, delete, edit)
-- [ ] Отрефакторить DashboardPage.vue и NoteList.vue (убрать гонки запросов, добавить лоадеры)
-- [ ] Очистить Pinia store от серверного состояния
+### 3.6 Vue Query Integration & Server-State Refactoring - ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.6-vue-query-integration)
+- [x] Установить @tanstack/vue-query
+- [x] Настроить VueQueryPlugin в приложении
+- [x] Вынести запросы в entities/note/api/useNotesQuery.ts
+- [x] Вынести мутации в соответствующие фичи (create, delete, edit)
+- [x] Отрефакторить DashboardPage.vue и NoteList.vue (убрать гонки запросов, добавить лоадеры)
+- [x] Очистить Pinia store от серверного состояния
 
-**Status**: 🔄 IN PROGRESS (Branch: feature/task-3.6-vue-query-integration)
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.6-vue-query-integration)
+> Примечание: Внедрен TanStack Vue Query для управления серверным состоянием. Это решило проблему гонок запросов в DashboardPage и NoteList, добавило автоматическую инвалидацию кеша после мутаций и упростило обработку состояний загрузки/ошибки. Pinia теперь используется только для UI-состояния (currentNote).
 
 ---
 
@@ -272,15 +273,15 @@
 - ✅ User module (Registration, Login, JWT)
 - ✅ Notes module (CRUD, Repository Pattern, Tests)
 - ✅ PostgreSQL Setup & Migration
-- ✅ Frontend (Vue 3, FSD, Pinia)
+- ✅ Frontend (Vue 3, FSD, Pinia, Vue Query)
 - ✅ Docker Compose Integration
 - ✅ Final Polish & Documentation
 
 ### In Progress
-- 🔄 Phase 3.6: Vue Query Integration
+- ⬜ None
 
 ### TODO (Prioritized)
-- ⬜ Complete frontend refactoring with Vue Query
+- 🏆 **PROJECT COMPLETED**
 
 ---
 

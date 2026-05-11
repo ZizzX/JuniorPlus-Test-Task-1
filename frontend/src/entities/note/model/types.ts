@@ -8,8 +8,5 @@ export interface Note {
 }
 
 export interface NoteState {
-  notes: Note[];
   currentNote: Note | null;
-  isLoading: boolean;
-  error: string | null;
 }
