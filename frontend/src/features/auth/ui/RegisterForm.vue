@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { UiInput, UiButton } from "@/shared/ui";
 import { useRegisterMutation } from "../api/useRegisterMutation";
 
+const { t } = useI18n();
 const name = ref("");
 const email = ref("");
 const password = ref("");
@@ -17,7 +19,7 @@ const handleSubmit = async () => {
         {
             onError: (e: any) => {
                 errorMessage.value =
-                    e.response?.data?.message || "Registration failed";
+                    e.response?.data?.message || t("auth.register.error");
             },
         },
     );
@@ -28,24 +30,24 @@ const handleSubmit = async () => {
     <form @submit.prevent="handleSubmit" class="space-y-4">
         <UiInput
             v-model="name"
-            label="Name"
-            placeholder="John Doe"
+            :label="t('auth.fields.name.label')"
+            :placeholder="t('auth.fields.name.placeholder')"
             required
             :disabled="isPending"
         />
         <UiInput
             v-model="email"
             type="email"
-            label="Email"
-            placeholder="your@email.com"
+            :label="t('auth.fields.email.label')"
+            :placeholder="t('auth.fields.email.placeholder')"
             required
             :disabled="isPending"
         />
         <UiInput
             v-model="password"
             type="password"
-            label="Password"
-            placeholder="••••••••"
+            :label="t('auth.fields.password.label')"
+            :placeholder="t('auth.fields.password.placeholder')"
             required
             :disabled="isPending"
         />
@@ -58,7 +60,11 @@ const handleSubmit = async () => {
             class="w-full"
             :disabled="isPending"
         >
-            {{ isPending ? "Creating account..." : "Register" }}
+            {{
+                isPending
+                    ? t("auth.register.submitting")
+                    : t("auth.register.submit")
+            }}
         </UiButton>
     </form>
 </template>

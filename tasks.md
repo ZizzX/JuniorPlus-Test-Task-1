@@ -285,8 +285,38 @@
 
 ---
 
-**Last Updated**: 2026-05-11
-**Total Tasks**: ~50
-**Completed**: ~50
+## 📌 ФАЗА 6: Localization (Vue I18n) - ✅ DONE (Date: 2026-05-12, Branch: feature/task-3.10-localization-ru)
+
+### 6.1 Настройка инфраструктуры i18n - ✅ DONE
+- [x] Установить зависимость `vue-i18n` (версия 11)
+- [x] Создать конфигурацию i18n в `shared/lib/i18n`
+- [x] Подключить i18n плагин в `main.ts`
+
+### 6.2 Переводы и локали - ✅ DONE
+- [x] Создать файлы локалей: `ru.json`, `en.json`, `kk.json`
+- [x] Наполнить файлы базовыми переводами (Auth, Notes, Common, Validation)
+- [x] Установить `ru` как язык по умолчанию с поддержкой сохранения в localStorage
+
+### 6.3 Интеграция в компоненты - ✅ DONE
+- [x] Заменить статические строки на `$t()` в Shared UI
+- [x] Заменить строки в Features (Auth forms, Note forms, Delete button)
+- [x] Заменить строки в Widgets (NavBar, NoteList)
+- [x] Заменить строки на Pages (Dashboard, Login, Register)
+
+### 6.4 Переключатель языков - ✅ DONE
+- [x] Создать компонент `LanguageSwitcher` в `features/language-switcher`
+- [x] Добавить переключатель в `NavBar`
+
+**Status**: ✅ DONE (Date: 2026-05-12, Branch: feature/task-3.10-localization-ru)
+**Total Tasks**: ~60
+**Completed**: ~60
+**Remaining**: 0
+**Completion %**: 100%
+
+---
+
+**Last Updated**: 2026-05-12
+**Total Tasks**: ~60
+**Completed**: ~60
 **Remaining**: 0
 **Completion %**: 100%

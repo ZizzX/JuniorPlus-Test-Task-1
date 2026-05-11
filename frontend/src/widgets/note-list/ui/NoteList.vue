@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useNotesQuery } from "@/entities/note";
 import { UiCard, UiButton } from "@/shared/ui";
 import { EditNoteForm } from "@/features/note-edit";
 import { DeleteNoteButton } from "@/features/note-delete";
 
+const { t } = useI18n();
 const { data: notes, isLoading, isError } = useNotesQuery();
 const editingNoteId = ref<string | null>(null);
 
@@ -15,30 +17,37 @@ const startEdit = (id: string) => {
 const stopEdit = () => {
     editingNoteId.value = null;
 };
+
+const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleString();
+};
 </script>
 
 <template>
     <div class="space-y-4">
         <div v-if="isLoading" class="text-center py-12">
-            <p class="text-gray-500">Loading notes...</p>
+            <p class="text-gray-500">{{ t("notes.loading") }}</p>
         </div>
 
         <div
             v-else-if="isError"
             class="text-center py-12 bg-red-50 text-red-600 rounded-lg"
         >
-            <p>Error loading notes. Please try again later.</p>
+            <p>{{ t("notes.error") }}</p>
         </div>
 
         <div
             v-else-if="!notes || notes.length === 0"
             class="text-center py-12 bg-white rounded-lg border-2 border-dashed border-gray-300"
         >
-            <p class="text-gray-500">No notes yet. Create your first one!</p>
+            <p class="text-gray-500">{{ t("notes.empty") }}</p>
         </div>
 
         <div v-else v-for="note in notes" :key="note.id">
-            <UiCard v-if="editingNoteId === note.id" title="Edit Note">
+            <UiCard
+                v-if="editingNoteId === note.id"
+                :title="t('notes.edit.title')"
+            >
                 <EditNoteForm
                     :note="note"
                     @success="stopEdit"
@@ -61,6 +70,7 @@ const stopEdit = () => {
                             variant="ghost"
                             class="p-2"
                             @click="startEdit(note.id)"
+                            :title="t('notes.edit.title')"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +88,11 @@ const stopEdit = () => {
                 </div>
                 <template #footer>
                     <div class="text-xs text-gray-400">
-                        Updated: {{ new Date(note.updatedAt).toLocaleString() }}
+                        {{
+                            t("notes.updated", {
+                                date: formatDate(note.updatedAt),
+                            })
+                        }}
                     </div>
                 </template>
             </UiCard>

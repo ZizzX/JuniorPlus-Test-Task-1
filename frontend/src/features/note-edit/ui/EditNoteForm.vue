@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { UiInput, UiButton } from "@/shared/ui";
 import { type Note } from "@/entities/note";
 import { useEditNoteMutation } from "../api/useEditNoteMutation";
 
+const { t } = useI18n();
 const props = defineProps<{
     note: Note;
 }>();
@@ -28,15 +30,19 @@ const validate = () => {
     const newErrors: { title?: string; content?: string } = {};
 
     if (!title.value.trim()) {
-        newErrors.title = "Заголовок должен содержать минимум 1 символ";
+        newErrors.title = t("notes.validation.titleRequired");
     } else if (title.value.length > TITLE_MAX_LENGTH) {
-        newErrors.title = `Заголовок не должен превышать ${TITLE_MAX_LENGTH} символов`;
+        newErrors.title = t("notes.validation.titleTooLong", {
+            max: TITLE_MAX_LENGTH,
+        });
     }
 
     if (!content.value.trim()) {
-        newErrors.content = "Содержимое должно содержать минимум 1 символ";
+        newErrors.content = t("notes.validation.contentRequired");
     } else if (content.value.length > CONTENT_MAX_LENGTH) {
-        newErrors.content = `Содержимое не должно превышать ${CONTENT_MAX_LENGTH} символов`;
+        newErrors.content = t("notes.validation.contentTooLong", {
+            max: CONTENT_MAX_LENGTH,
+        });
     }
 
     errors.value = newErrors;
@@ -57,8 +63,7 @@ const handleSubmit = async () => {
         errors.value = {};
     } catch (error: any) {
         serverError.value =
-            error.response?.data?.message ||
-            "Не удалось обновить заметку. Попробуйте позже.";
+            error.response?.data?.message || t("notes.edit.error");
         console.error("Failed to edit note:", error);
     }
 };
@@ -72,8 +77,8 @@ const contentCharCount = computed(() => content.value.length);
         <div class="space-y-1">
             <UiInput
                 v-model="title"
-                label="Title"
-                placeholder="Note title"
+                :label="t('notes.fields.title.label')"
+                :placeholder="t('notes.fields.title.placeholder')"
                 :error="errors.title"
                 :disabled="isPending"
             />
@@ -92,7 +97,9 @@ const contentCharCount = computed(() => content.value.length);
         </div>
 
         <div class="flex flex-col gap-1 w-full">
-            <label class="text-sm font-medium text-gray-700">Content</label>
+            <label class="text-sm font-medium text-gray-700">{{
+                t("notes.fields.content.label")
+            }}</label>
             <textarea
                 v-model="content"
                 class="px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed"
@@ -102,7 +109,7 @@ const contentCharCount = computed(() => content.value.length);
                     'border-red-500 focus:ring-red-500 focus:border-red-500':
                         errors.content,
                 }"
-                placeholder="Note content..."
+                :placeholder="t('notes.fields.content.placeholder')"
                 rows="4"
                 :disabled="isPending"
             ></textarea>
@@ -138,7 +145,7 @@ const contentCharCount = computed(() => content.value.length);
                 class="flex-1"
                 :loading="isPending"
             >
-                Save Changes
+                {{ t("notes.edit.submit") }}
             </UiButton>
             <UiButton
                 type="button"
@@ -146,7 +153,7 @@ const contentCharCount = computed(() => content.value.length);
                 @click="emit('cancel')"
                 :disabled="isPending"
             >
-                Cancel
+                {{ t("common.cancel") }}
             </UiButton>
         </div>
     </form>

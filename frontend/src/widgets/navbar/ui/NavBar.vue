@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { useAuthStore, useUserQuery } from "@/entities/user";
 import { UiButton } from "@/shared/ui";
+import { LanguageSwitcher } from "@/features/language-switcher";
 import { useRouter } from "vue-router";
 import { useQueryClient } from "@tanstack/vue-query";
 
+const { t } = useI18n();
 const authStore = useAuthStore();
 const router = useRouter();
 const queryClient = useQueryClient();
@@ -30,23 +33,31 @@ const handleLogout = () => {
                     </router-link>
                 </div>
 
-                <div class="flex items-center gap-4">
-                    <template v-if="authStore.isAuthenticated">
-                        <span class="text-sm text-gray-700 hidden sm:block">
-                            {{ user?.email }}
-                        </span>
-                        <UiButton variant="ghost" @click="handleLogout">
-                            Logout
-                        </UiButton>
-                    </template>
-                    <template v-else>
-                        <router-link to="/login">
-                            <UiButton variant="ghost">Login</UiButton>
-                        </router-link>
-                        <router-link to="/register">
-                            <UiButton variant="primary">Register</UiButton>
-                        </router-link>
-                    </template>
+                <div class="flex items-center gap-6">
+                    <LanguageSwitcher />
+
+                    <div class="flex items-center gap-4">
+                        <template v-if="authStore.isAuthenticated">
+                            <span class="text-sm text-gray-700 hidden sm:block">
+                                {{ user?.email }}
+                            </span>
+                            <UiButton variant="ghost" @click="handleLogout">
+                                {{ t("auth.logout") }}
+                            </UiButton>
+                        </template>
+                        <template v-else>
+                            <router-link to="/login">
+                                <UiButton variant="ghost">{{
+                                    t("auth.login.title")
+                                }}</UiButton>
+                            </router-link>
+                            <router-link to="/register">
+                                <UiButton variant="primary">{{
+                                    t("auth.register.title")
+                                }}</UiButton>
+                            </router-link>
+                        </template>
+                    </div>
                 </div>
             </div>
         </div>

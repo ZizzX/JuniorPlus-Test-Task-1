@@ -1,0 +1,78 @@
+{
+  "auth": {
+    "login": {
+      "title": "Login",
+      "submit": "Sign In",
+      "submitting": "Logging in...",
+      "error": "Login failed"
+    },
+    "register": {
+      "title": "Register",
+      "submit": "Sign Up",
+      "submitting": "Registering...",
+      "error": "Registration failed"
+    },
+    "fields": {
+      "email": {
+        "label": "Email",
+        "placeholder": "your@email.com"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "••••••••"
+      },
+      "name": {
+        "label": "Name",
+        "placeholder": "John Doe"
+      }
+    },
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "logout": "Logout"
+  },
+  "notes": {
+    "title": "Notes",
+    "loading": "Loading notes...",
+    "error": "Error loading notes. Please try again later.",
+    "create": {
+      "button": "Create Note",
+      "title": "New Note",
+      "submit": "Create",
+      "submitting": "Creating...",
+      "error": "Failed to create note. Please try again later."
+    },
+    "edit": {
+      "title": "Edit Note",
+      "submit": "Save",
+      "submitting": "Saving...",
+      "error": "Failed to save note. Please try again later."
+    },
+    "delete": {
+      "button": "Delete",
+      "confirm": "Are you sure?"
+    },
+    "fields": {
+      "title": {
+        "label": "Title",
+        "placeholder": "Enter title..."
+      },
+      "content": {
+        "label": "Content",
+        "placeholder": "Enter note content..."
+      }
+    },
+    "validation": {
+      "titleRequired": "Title must contain at least 1 character",
+      "titleTooLong": "Title must not exceed {max} characters",
+      "contentRequired": "Content must contain at least 1 character",
+      "contentTooLong": "Content must not exceed {max} characters"
+    },
+    "empty": "No notes yet. Create your first one!",
+    "updated": "Updated: {date}"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading..."
+  }
+}

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { UiInput, UiButton } from "@/shared/ui";
 import { useCreateNoteMutation } from "../api/useCreateNoteMutation";
 
+const { t } = useI18n();
 const { mutateAsync: createNote, isPending } = useCreateNoteMutation();
 
 const title = ref("");
@@ -18,15 +20,19 @@ const validate = () => {
     const newErrors: { title?: string; content?: string } = {};
 
     if (!title.value.trim()) {
-        newErrors.title = "Заголовок должен содержать минимум 1 символ";
+        newErrors.title = t("notes.validation.titleRequired");
     } else if (title.value.length > TITLE_MAX_LENGTH) {
-        newErrors.title = `Заголовок не должен превышать ${TITLE_MAX_LENGTH} символов`;
+        newErrors.title = t("notes.validation.titleTooLong", {
+            max: TITLE_MAX_LENGTH,
+        });
     }
 
     if (!content.value.trim()) {
-        newErrors.content = "Содержимое должно содержать минимум 1 символ";
+        newErrors.content = t("notes.validation.contentRequired");
     } else if (content.value.length > CONTENT_MAX_LENGTH) {
-        newErrors.content = `Содержимое не должно превышать ${CONTENT_MAX_LENGTH} символов`;
+        newErrors.content = t("notes.validation.contentTooLong", {
+            max: CONTENT_MAX_LENGTH,
+        });
     }
 
     errors.value = newErrors;
@@ -47,8 +53,7 @@ const handleSubmit = async () => {
         errors.value = {};
     } catch (error: any) {
         serverError.value =
-            error.response?.data?.message ||
-            "Не удалось создать заметку. Попробуйте позже.";
+            error.response?.data?.message || t("notes.create.error");
         console.error("Failed to create note:", error);
     }
 };
@@ -62,8 +67,8 @@ const contentCharCount = computed(() => content.value.length);
         <div class="space-y-1">
             <UiInput
                 v-model="title"
-                label="Заголовок"
-                placeholder="Заголовок заметки"
+                :label="t('notes.fields.title.label')"
+                :placeholder="t('notes.fields.title.placeholder')"
                 :error="errors.title"
                 :disabled="isPending"
             />
@@ -82,7 +87,9 @@ const contentCharCount = computed(() => content.value.length);
         </div>
 
         <div class="flex flex-col gap-1 w-full">
-            <label class="text-sm font-medium text-gray-700">Содержимое</label>
+            <label class="text-sm font-medium text-gray-700">{{
+                t("notes.fields.content.label")
+            }}</label>
             <textarea
                 v-model="content"
                 class="px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed"
@@ -92,7 +99,7 @@ const contentCharCount = computed(() => content.value.length);
                     'border-red-500 focus:ring-red-500 focus:border-red-500':
                         errors.content,
                 }"
-                placeholder="Текст заметки..."
+                :placeholder="t('notes.fields.content.placeholder')"
                 rows="4"
                 :disabled="isPending"
             ></textarea>
@@ -127,7 +134,7 @@ const contentCharCount = computed(() => content.value.length);
             class="w-full"
             :loading="isPending"
         >
-            Создать заметку
+            {{ t("notes.create.submit") }}
         </UiButton>
     </form>
 </template>

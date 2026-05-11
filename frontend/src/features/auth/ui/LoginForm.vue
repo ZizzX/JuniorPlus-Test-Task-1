@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { UiInput, UiButton } from "@/shared/ui";
 import { useLoginMutation } from "../api/useLoginMutation";
 
+const { t } = useI18n();
 const email = ref("");
 const password = ref("");
 const errorMessage = ref("");
@@ -16,7 +18,7 @@ const handleSubmit = async () => {
         {
             onError: (e: any) => {
                 errorMessage.value =
-                    e.response?.data?.message || "Login failed";
+                    e.response?.data?.message || t("auth.login.error");
             },
         },
     );
@@ -28,16 +30,16 @@ const handleSubmit = async () => {
         <UiInput
             v-model="email"
             type="email"
-            label="Email"
-            placeholder="your@email.com"
+            :label="t('auth.fields.email.label')"
+            :placeholder="t('auth.fields.email.placeholder')"
             required
             :disabled="isPending"
         />
         <UiInput
             v-model="password"
             type="password"
-            label="Password"
-            placeholder="••••••••"
+            :label="t('auth.fields.password.label')"
+            :placeholder="t('auth.fields.password.placeholder')"
             required
             :disabled="isPending"
         />
@@ -50,7 +52,9 @@ const handleSubmit = async () => {
             class="w-full"
             :disabled="isPending"
         >
-            {{ isPending ? "Logging in..." : "Login" }}
+            {{
+                isPending ? t("auth.login.submitting") : t("auth.login.submit")
+            }}
         </UiButton>
     </form>
 </template>
