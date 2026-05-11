@@ -231,16 +231,16 @@
 **Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.5-widgets-pages)
 > Примечание: Реализованы виджеты NavBar и NoteList. Созданы страницы Dashboard, Login и Register. Настроен Vue Router с Middleware (guards) для проверки авторизации. App.vue переведен на использование router-view.
 
-### 3.6 Vue Query Integration & Server-State Refactoring - ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.6-vue-query-integration)
+### 3.6 Vue Query Integration & Server-State Refactoring - ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.7-vue-query-auth)
 - [x] Установить @tanstack/vue-query
 - [x] Настроить VueQueryPlugin в приложении
-- [x] Вынести запросы в entities/note/api/useNotesQuery.ts
-- [x] Вынести мутации в соответствующие фичи (create, delete, edit)
-- [x] Отрефакторить DashboardPage.vue и NoteList.vue (убрать гонки запросов, добавить лоадеры)
-- [x] Очистить Pinia store от серверного состояния
+- [x] Вынести запросы в entities/note/api/useNotesQuery.ts и entities/user/api/useUserQuery.ts
+- [x] Вынести мутации в фичи (create, delete, edit note, login, register)
+- [x] Отрефакторить DashboardPage.vue, NoteList.vue, LoginForm.vue, RegisterForm.vue
+- [x] Очистить Pinia store от серверного состояния и ручного управления axios
 
-**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.6-vue-query-integration)
-> Примечание: Внедрен TanStack Vue Query для управления серверным состоянием. Это решило проблему гонок запросов в DashboardPage и NoteList, добавило автоматическую инвалидацию кеша после мутаций и упростило обработку состояний загрузки/ошибки. Pinia теперь используется только для UI-состояния (currentNote).
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.7-vue-query-auth)
+> Примечание: Полная миграция на TanStack Vue Query завершена. Все ручные вызовы axios и управление состоянием загрузки/ошибок вынесены из Pinia и компонентов в специализированные хуки API. Это обеспечило консистентность данных, автоматическую инвалидацию кеша и отсутствие Race Conditions во всем приложении.
 
 ---
 

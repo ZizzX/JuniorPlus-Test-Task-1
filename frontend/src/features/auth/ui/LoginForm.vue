@@ -1,30 +1,25 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { UiInput, UiButton } from "@/shared/ui";
-import { useAuthStore } from "@/entities/user";
-import { api } from "@/shared/api";
+import { useLoginMutation } from "../api/useLoginMutation";
 
-const authStore = useAuthStore();
 const email = ref("");
 const password = ref("");
-const error = ref("");
+const errorMessage = ref("");
+
+const { mutate: login, isPending } = useLoginMutation();
 
 const handleSubmit = async () => {
-    error.value = "";
-    authStore.isLoading = true;
-    try {
-        const response = await api.post("/users/login", {
-            email: email.value,
-            password: password.value,
-        });
-
-        authStore.setToken(response.data.jwt);
-        await authStore.fetchUser();
-    } catch (e: any) {
-        error.value = e.response?.data?.message || "Login failed";
-    } finally {
-        authStore.isLoading = false;
-    }
+    errorMessage.value = "";
+    login(
+        { email: email.value, password: password.value },
+        {
+            onError: (e: any) => {
+                errorMessage.value =
+                    e.response?.data?.message || "Login failed";
+            },
+        },
+    );
 };
 </script>
 
@@ -36,6 +31,7 @@ const handleSubmit = async () => {
             label="Email"
             placeholder="your@email.com"
             required
+            :disabled="isPending"
         />
         <UiInput
             v-model="password"
@@ -43,15 +39,18 @@ const handleSubmit = async () => {
             label="Password"
             placeholder="••••••••"
             required
+            :disabled="isPending"
         />
-        <div v-if="error" class="text-sm text-red-500">{{ error }}</div>
+        <div v-if="errorMessage" class="text-sm text-red-500">
+            {{ errorMessage }}
+        </div>
         <UiButton
             type="submit"
             variant="primary"
             class="w-full"
-            :disabled="authStore.isLoading"
+            :disabled="isPending"
         >
-            {{ authStore.isLoading ? "Logging in..." : "Login" }}
+            {{ isPending ? "Logging in..." : "Login" }}
         </UiButton>
     </form>
 </template>

@@ -1,15 +1,9 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
 import { NavBar } from "@/widgets/navbar";
-import { useAuthStore } from "@/entities/user";
+import { useUserQuery } from "@/entities/user";
 
-const authStore = useAuthStore();
-
-onMounted(() => {
-    if (authStore.isAuthenticated && !authStore.user) {
-        authStore.fetchUser();
-    }
-});
+// This hook will handle fetching user info if token is present
+useUserQuery();
 </script>
 
 <template>

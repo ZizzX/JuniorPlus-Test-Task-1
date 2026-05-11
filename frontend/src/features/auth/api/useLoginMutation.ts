@@ -1,0 +1,23 @@
+import { useMutation, useQueryClient } from "@tanstack/vue-query";
+import { api } from "@/shared/api";
+import { useAuthStore } from "@/entities/user";
+
+interface LoginResponse {
+  jwt: string;
+}
+
+export const useLoginMutation = () => {
+  const authStore = useAuthStore();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload: Record<string, string>) => {
+      const { data } = await api.post<LoginResponse>("/users/login", payload);
+      return data;
+    },
+    onSuccess: (data) => {
+      authStore.setToken(data.jwt);
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
+};
