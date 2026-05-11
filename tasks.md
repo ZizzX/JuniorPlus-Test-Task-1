@@ -215,11 +215,12 @@
 **Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.3-entities-layer)
 > Примечание: Установлен Pinia. Созданы типы и сторы для User и Note в слое Entities. Добавлена демонстрация работы сторов в App.vue. Исправлены ошибки типизации при сборке.
 
-### 3.4 Слой Features (Auth, CreateNote, NoteActions)
-- [ ] Реализовать формы логина/регистрации
-- [ ] Реализовать компоненты создания, редактирования и удаления заметки
+### 3.4 Слой Features (Auth, CreateNote, NoteActions) - ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.4-features-layer)
+- [x] Реализовать формы логина/регистрации
+- [x] Реализовать компоненты создания, редактирования и удаления заметки
 
-**Status**: ⬜ NOT STARTED
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.4-features-layer)
+> Примечание: Реализованы фичи LoginForm, RegisterForm, CreateNoteForm, EditNoteForm и DeleteNoteButton. Настроены алиасы путей (@/...). Проверена интеграция со сторами. Добавлена интерактивная демонстрация в App.vue.
 
 ### 3.5 Слой Widgets и Pages
 - [ ] Собрать Widgets (NavBar, NoteList)

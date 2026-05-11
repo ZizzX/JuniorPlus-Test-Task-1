@@ -1,37 +1,24 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { UiButton, UiInput, UiCard } from "../shared/ui";
-import { useAuthStore } from "../entities/user";
-import { useNoteStore } from "../entities/note";
+import { UiButton, UiCard } from "@/shared/ui";
+import { useAuthStore } from "@/entities/user";
+import { useNoteStore, type Note } from "@/entities/note";
+import { LoginForm, RegisterForm } from "@/features/auth";
+import { CreateNoteForm } from "@/features/note-create";
+import { EditNoteForm } from "@/features/note-edit";
+import { DeleteNoteButton } from "@/features/note-delete";
 
 const authStore = useAuthStore();
 const noteStore = useNoteStore();
-const testInput = ref("");
-
-const loginAsGuest = () => {
-    authStore.setUser({
-        id: "1",
-        email: "guest@example.com",
-        name: "Guest User",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-    });
-    authStore.setToken("mock-jwt-token");
-};
+const isLogin = ref(true);
+const editingNote = ref<Note | null>(null);
 
 const logout = () => {
     authStore.logout();
 };
 
-const addMockNote = () => {
-    noteStore.addNote({
-        id: crypto.randomUUID(),
-        title: "New Mock Note",
-        content: "This is a note created in the Pinia store.",
-        userId: authStore.user?.id || "0",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-    });
+const handleEditSuccess = () => {
+    editingNote.value = null;
 };
 </script>
 
@@ -41,10 +28,10 @@ const addMockNote = () => {
             <header class="flex justify-between items-center">
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900">
-                        Entities & Stores Demo
+                        Features Layer Demo
                     </h1>
                     <p class="text-gray-600 mt-2">
-                        Vue 3 + Pinia + FSD Structure
+                        FSD: Shared -> Entities -> Features
                     </p>
                 </div>
                 <div
@@ -57,94 +44,102 @@ const addMockNote = () => {
                     >
                     <UiButton variant="ghost" @click="logout">Logout</UiButton>
                 </div>
-                <div v-else>
-                    <UiButton variant="primary" @click="loginAsGuest"
-                        >Login as Guest</UiButton
-                    >
-                </div>
             </header>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Auth Section -->
-                <UiCard title="Auth Entity">
-                    <div class="space-y-4">
-                        <div
-                            class="p-3 bg-gray-100 rounded text-xs font-mono overflow-auto max-h-40"
+                <!-- Auth Features -->
+                <div v-if="!authStore.isAuthenticated">
+                    <UiCard :title="isLogin ? 'Login' : 'Register'">
+                        <LoginForm v-if="isLogin" />
+                        <RegisterForm v-else />
+                        <template #footer>
+                            <button
+                                @click="isLogin = !isLogin"
+                                class="text-sm text-blue-600 hover:underline w-full text-center"
+                            >
+                                {{
+                                    isLogin
+                                        ? "Don't have an account? Register"
+                                        : "Already have an account? Login"
+                                }}
+                            </button>
+                        </template>
+                    </UiCard>
+                </div>
+
+                <!-- Note Create Feature -->
+                <div v-else>
+                    <UiCard title="Create New Note">
+                        <CreateNoteForm />
+                    </UiCard>
+                </div>
+
+                <!-- Notes List (demonstrating Edit/Delete features) -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-gray-900">
+                        Your Notes ({{ noteStore.notes.length }})
+                    </h3>
+                    <div
+                        v-if="noteStore.notes.length === 0"
+                        class="text-gray-400 py-8 text-center bg-white rounded-lg border border-dashed border-gray-300"
+                    >
+                        No notes yet. Create one!
+                    </div>
+                    <div
+                        v-for="note in noteStore.notes"
+                        :key="note.id"
+                        class="space-y-4"
+                    >
+                        <UiCard
+                            v-if="editingNote?.id === note.id"
+                            title="Edit Note"
                         >
-                            <pre>{{
-                                JSON.stringify(authStore.$state, null, 2)
-                            }}</pre>
-                        </div>
-                    </div>
-                </UiCard>
-
-                <!-- Notes Section -->
-                <UiCard title="Notes Entity">
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center">
-                            <h4 class="font-medium">
-                                Total Notes: {{ noteStore.notes.length }}
-                            </h4>
-                            <UiButton
-                                variant="secondary"
-                                @click="addMockNote"
-                                :disabled="!authStore.isAuthenticated"
-                            >
-                                Add Note
-                            </UiButton>
-                        </div>
-
-                        <div class="space-y-2 max-h-60 overflow-y-auto">
-                            <div
-                                v-for="note in noteStore.notes"
-                                :key="note.id"
-                                class="p-2 border rounded bg-white shadow-sm"
-                            >
-                                <h5 class="font-bold text-sm">
-                                    {{ note.title }}
-                                </h5>
-                                <p class="text-xs text-gray-500 truncate">
-                                    {{ note.content }}
-                                </p>
+                            <EditNoteForm
+                                :note="note"
+                                @success="handleEditSuccess"
+                                @cancel="editingNote = null"
+                            />
+                        </UiCard>
+                        <UiCard v-else>
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-bold text-lg text-gray-900">
+                                        {{ note.title }}
+                                    </h4>
+                                    <p
+                                        class="text-gray-600 mt-1 whitespace-pre-wrap"
+                                    >
+                                        {{ note.content }}
+                                    </p>
+                                </div>
+                                <div class="flex gap-2">
+                                    <UiButton
+                                        variant="ghost"
+                                        @click="editingNote = note"
+                                        class="p-2"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            class="h-5 w-5"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor"
+                                        >
+                                            <path
+                                                d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+                                            />
+                                        </svg>
+                                    </UiButton>
+                                    <DeleteNoteButton :noteId="note.id" />
+                                </div>
                             </div>
-                            <p
-                                v-if="noteStore.notes.length === 0"
-                                class="text-center text-gray-400 py-4 text-sm"
-                            >
-                                No notes yet. Login and add some!
-                            </p>
-                        </div>
-                    </div>
-                </UiCard>
-            </div>
-
-            <!-- Shared UI Showcase -->
-            <UiCard title="Shared UI (Reminder)">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <h4 class="text-sm font-medium text-gray-700">
-                            Inputs
-                        </h4>
-                        <UiInput
-                            v-model="testInput"
-                            label="Live Binding"
-                            placeholder="Type..."
-                        />
-                        <p class="text-xs text-gray-500">
-                            Value: {{ testInput }}
-                        </p>
-                    </div>
-                    <div class="space-y-2">
-                        <h4 class="text-sm font-medium text-gray-700">
-                            Buttons
-                        </h4>
-                        <div class="flex gap-2">
-                            <UiButton variant="danger">Action</UiButton>
-                            <UiButton variant="ghost">Cancel</UiButton>
-                        </div>
+                            <div class="mt-4 text-xs text-gray-400">
+                                Created:
+                                {{ new Date(note.createdAt).toLocaleString() }}
+                            </div>
+                        </UiCard>
                     </div>
                 </div>
-            </UiCard>
+            </div>
         </div>
     </div>
 </template>
