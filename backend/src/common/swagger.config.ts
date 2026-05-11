@@ -20,7 +20,14 @@ const options: swaggerJSDoc.Options = {
 			},
 		},
 	},
-	apis: ['./src/**/*.ts'], // Path to the API docs
+	apis: [
+		'./src/**/*.ts',
+		'./dist/**/*.js',
+		'./src/users/*.ts',
+		'./dist/users/*.js',
+		'./src/notes/*.ts',
+		'./dist/notes/*.js',
+	],
 };
 
 const swaggerSpec = swaggerJSDoc(options);

@@ -155,8 +155,8 @@ export class App {
 
 		await this.prismaService.connect();
 
-		this.server = this.app.listen(this.port, () => {
-			this.logger.info(`Server is running on http://localhost:${this.port}`);
+		this.server = this.app.listen(this.port, '0.0.0.0', () => {
+			this.logger.info(`Server is running on http://0.0.0.0:${this.port}`);
 		});
 
 		await this.setupGracefulShutdown();

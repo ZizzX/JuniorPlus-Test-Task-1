@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import type { User } from "./types";
+import { api } from "@/shared/api";
 
 export const useAuthStore = defineStore("auth", () => {
   const user = ref<User | null>(null);
@@ -9,6 +10,16 @@ export const useAuthStore = defineStore("auth", () => {
   const error = ref<string | null>(null);
 
   const isAuthenticated = computed(() => !!token.value);
+
+  async function fetchUser() {
+    if (!token.value) return;
+    try {
+      const response = await api.get("/users/info");
+      user.value = response.data;
+    } catch (e) {
+      logout();
+    }
+  }
 
   function setToken(newToken: string | null) {
     token.value = newToken;
@@ -34,6 +45,7 @@ export const useAuthStore = defineStore("auth", () => {
     isAuthenticated,
     isLoading,
     error,
+    fetchUser,
     setToken,
     setUser,
     logout,

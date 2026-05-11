@@ -19,14 +19,7 @@ const content = ref(props.note.content);
 const handleSubmit = async () => {
     if (!title.value) return;
 
-    const updatedNote = {
-        ...props.note,
-        title: title.value,
-        content: content.value,
-        updatedAt: new Date().toISOString(),
-    };
-
-    noteStore.updateNote(updatedNote);
+    await noteStore.updateNote(props.note.id, title.value, content.value);
     emit("success");
 };
 </script>
