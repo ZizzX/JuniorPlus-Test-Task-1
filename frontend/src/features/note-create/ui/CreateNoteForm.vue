@@ -62,8 +62,8 @@ const contentCharCount = computed(() => content.value.length);
         <div class="space-y-1">
             <UiInput
                 v-model="title"
-                label="Title"
-                placeholder="Note title"
+                label="Заголовок"
+                placeholder="Заголовок заметки"
                 :error="errors.title"
                 :disabled="isPending"
             />
@@ -82,7 +82,7 @@ const contentCharCount = computed(() => content.value.length);
         </div>
 
         <div class="flex flex-col gap-1 w-full">
-            <label class="text-sm font-medium text-gray-700">Content</label>
+            <label class="text-sm font-medium text-gray-700">Содержимое</label>
             <textarea
                 v-model="content"
                 class="px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed"
@@ -92,7 +92,7 @@ const contentCharCount = computed(() => content.value.length);
                     'border-red-500 focus:ring-red-500 focus:border-red-500':
                         errors.content,
                 }"
-                placeholder="Note content..."
+                placeholder="Текст заметки..."
                 rows="4"
                 :disabled="isPending"
             ></textarea>
@@ -127,7 +127,7 @@ const contentCharCount = computed(() => content.value.length);
             class="w-full"
             :loading="isPending"
         >
-            Create Note
+            Создать заметку
         </UiButton>
     </form>
 </template>
