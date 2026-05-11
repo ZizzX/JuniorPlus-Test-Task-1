@@ -193,12 +193,13 @@
 
 ## 📌 ФАЗА 3: Frontend (Vue 3) - Feature-Sliced Design
 
-### 3.1 Инициализация и Структура
-- [ ] Инициализировать Vue 3 + TS + Vite
-- [ ] Настроить Tailwind CSS
-- [ ] Создать структуру папок по FSD (`app`, `pages`, `widgets`, `features`, `entities`, `shared`)
+### 3.1 Инициализация и Структура - ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.1-frontend-init)
+- [x] Инициализировать Vue 3 + TS + Vite
+- [x] Настроить Tailwind CSS
+- [x] Создать структуру папок по FSD (`app`, `pages`, `widgets`, `features`, `entities`, `shared`)
 
-**Status**: ⬜ NOT STARTED
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.1-frontend-init)
+> Примечание: Установлен Tailwind CSS v4 с использованием плагина @tailwindcss/vite. Структура проекта реорганизована под Feature-Sliced Design. Boilerplate очищен.
 
 ### 3.2 Слой Shared (API, UI Kit)
 - [ ] Настроить API клиент (Axios) с JWT interceptor
