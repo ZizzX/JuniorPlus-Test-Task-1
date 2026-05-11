@@ -208,11 +208,11 @@
 **Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.2-shared-layer)
 > Примечание: Настроен Axios с интерцепторами для JWT. Созданы базовые компоненты UiButton, UiInput, UiCard в слое Shared. Добавлена демо-страница в App.vue.
 
-### 3.3 Слой Entities (Notes, User)
+### 3.3 Слой Entities (Notes, User) - 🔄 IN PROGRESS (Branch: feature/task-3.3-entities-layer)
 - [ ] Создать типы и интерфейсы сущностей
 - [ ] Реализовать Pinia сторы (`notes.store.ts`, `auth.store.ts`)
 
-**Status**: ⬜ NOT STARTED
+**Status**: 🔄 IN PROGRESS (Branch: feature/task-3.3-entities-layer)
 
 ### 3.4 Слой Features (Auth, CreateNote, NoteActions)
 - [ ] Реализовать формы логина/регистрации
