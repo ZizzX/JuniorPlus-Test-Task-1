@@ -176,18 +176,19 @@
 
 ---
 
-## 📌 ФАЗА 2: PostgreSQL Setup & Database Migration
-### 2.1 Настройка БД
-- [ ] Настроить PostgreSQL (локально или Docker)
-- [ ] Обновить `DATABASE_URL` в `.env`
-- [ ] Переключить Prisma provider на `postgresql`
+## 📌 ФАЗА 2: PostgreSQL Setup & Database Migration - ✅ DONE (Date: 2026-05-11, Branch: feature/phase-2-postgresql-setup)
 
-**Status**: ⬜ NOT STARTED
+### 2.1 Настройка БД
+- [x] Настроить PostgreSQL (локально или Docker)
+- [x] Обновить `DATABASE_URL` в `.env`
+- [x] Переключить Prisma provider на `postgresql`
+
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/phase-2-postgresql-setup)
 
 ### 2.2 Миграции
-- [ ] Создать и применить первую миграцию (`prisma migrate dev`)
+- [x] Создать и применить первую миграцию (`prisma migrate dev`)
 
-**Status**: ⬜ NOT STARTED
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/phase-2-postgresql-setup)
 
 ---
 
@@ -251,15 +252,14 @@
 ### Completed
 - ✅ Backend infrastructure (Express, DI, Auth, Logging)
 - ✅ User module (Registration, Login, JWT)
+- ✅ Notes module (CRUD, Repository Pattern, Tests)
+- ✅ PostgreSQL Setup & Migration
 
 ### In Progress
 - ⬜ None
 
 ### TODO (Prioritized)
-- ❌ **NEXT**: 1.1 Обновить Prisma Schema
-- ❌ 1.2 - 1.10 Backend Notes Module
-- ❌ ФАЗА 2 - Database Setup
-- ❌ ФАЗА 3 - Frontend (FSD)
+- ❌ **NEXT**: ФАЗА 3 - Frontend (FSD)
 - ❌ ФАЗА 4 - Docker Compose
 
 ---

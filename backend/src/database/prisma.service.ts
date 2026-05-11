@@ -2,8 +2,8 @@ import { inject, injectable } from 'inversify';
 import { TYPES } from '../common/inject.constants';
 import { ILogger } from '../logger/logger.interface';
 import { IConfigService } from '../config/config.service.interface';
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 import { PrismaClient } from '../generated/prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
 
 @injectable()
 export class PrismaService {
@@ -13,8 +13,8 @@ export class PrismaService {
 		@inject(TYPES.LoggerService) private logger: ILogger,
 		@inject(TYPES.ConfigService) private configService: IConfigService
 	) {
-		const dbUrl = this.configService.get<string>('DATABASE_URL');
-		const adapter = new PrismaBetterSqlite3({ url: dbUrl });
+		const connectionString = this.configService.get<string>('DATABASE_URL');
+		const adapter = new PrismaPg({ connectionString });
 		this.client = new PrismaClient({ adapter });
 	}
 
