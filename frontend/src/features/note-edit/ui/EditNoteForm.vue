@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
+import Textarea from "primevue/textarea";
 import { UiInput, UiButton } from "@/shared/ui";
 import { type Note } from "@/entities/note";
 import { useEditNoteMutation } from "../api/useEditNoteMutation";
@@ -97,22 +98,19 @@ const contentCharCount = computed(() => content.value.length);
         </div>
 
         <div class="flex flex-col gap-1 w-full">
-            <label class="text-sm font-medium text-gray-700">{{
-                t("notes.fields.content.label")
-            }}</label>
-            <textarea
+            <label
+                class="text-sm font-medium text-surface-700 dark:text-surface-0/70"
+                >{{ t("notes.fields.content.label") }}</label
+            >
+            <Textarea
                 v-model="content"
-                class="px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed"
-                :class="{
-                    'border-gray-300 focus:ring-blue-500 focus:border-blue-500':
-                        !errors.content,
-                    'border-red-500 focus:ring-red-500 focus:border-red-500':
-                        errors.content,
-                }"
                 :placeholder="t('notes.fields.content.placeholder')"
                 rows="4"
                 :disabled="isPending"
-            ></textarea>
+                :invalid="!!errors.content"
+                class="w-full"
+                autoResize
+            />
             <div class="flex justify-between items-start">
                 <span v-if="errors.content" class="text-xs text-red-500">{{
                     errors.content
