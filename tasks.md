@@ -222,12 +222,13 @@
 **Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.4-features-layer)
 > Примечание: Реализованы фичи LoginForm, RegisterForm, CreateNoteForm, EditNoteForm и DeleteNoteButton. Настроены алиасы путей (@/...). Проверена интеграция со сторами. Добавлена интерактивная демонстрация в App.vue.
 
-### 3.5 Слой Widgets и Pages
-- [ ] Собрать Widgets (NavBar, NoteList)
-- [ ] Реализовать Pages (Dashboard, NoteEditor, Login, Register)
-- [ ] Настроить Vue Router с Guards
+### 3.5 Слой Widgets и Pages - ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.5-widgets-pages)
+- [x] Собрать Widgets (NavBar, NoteList)
+- [x] Реализовать Pages (Dashboard, NoteEditor, Login, Register)
+- [x] Настроить Vue Router с Guards
 
-**Status**: ⬜ NOT STARTED
+**Status**: ✅ DONE (Date: 2026-05-11, Branch: feature/task-3.5-widgets-pages)
+> Примечание: Реализованы виджеты NavBar и NoteList. Созданы страницы Dashboard, Login и Register. Настроен Vue Router с Middleware (guards) для проверки авторизации. App.vue переведен на использование router-view.
 
 ---
 
