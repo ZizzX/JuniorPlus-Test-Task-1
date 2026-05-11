@@ -47,8 +47,21 @@ export class App {
 	}
 
 	useMiddleware() {
-		this.app.use(helmet());
-		this.app.use(cors());
+		this.app.use(
+			cors({
+				origin: '*',
+				methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+				allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+				preflightContinue: false,
+				optionsSuccessStatus: 204,
+			})
+		);
+		this.app.use(
+			helmet({
+				contentSecurityPolicy: false,
+				crossOriginResourcePolicy: false,
+			})
+		);
 		this.app.use(
 			rateLimit({
 				windowMs: 15 * 60 * 1000,
