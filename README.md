@@ -20,7 +20,7 @@ docker-compose up --build
 После завершения сборки и запуска:
 - **Frontend** будет доступен по адресу: [http://localhost](http://localhost)
 - **Backend API** будет доступен по адресу: [http://localhost:8000](http://localhost:8000)
-- **Swagger Documentation**: [http://localhost:8000/api-docs](http://localhost:8000/api-docs)
+- **Swagger Documentation**: [http://localhost:8000/api-docs](http://localhost:8000/docs)
 
 ---
 
